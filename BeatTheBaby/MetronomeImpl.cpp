@@ -23,13 +23,11 @@ bool MetronomeImpl::checkTick() {
 }
 
 float MetronomeImpl::getPos() {
-	// TODO
-	return 0;
+	return this->clock.getElapsedTime().asMilliseconds()/this->timeUnit;
 }
 
 float MetronomeImpl::getBpm() {
-	// TODO 
-	return 0;
+	return this->bpm;
 }
 
 

@@ -7,8 +7,6 @@
 
 
 CoreImpl::CoreImpl(){
-	//world = new WorldImpl();
-	//jukebox = new JukeboxImpl();
 	metronome = new MetronomeImpl(120);
 };
 
@@ -21,11 +19,26 @@ void CoreImpl::gameLoop() {
 		//this.processInput();
 		//this.update(elapsed);
 		//this.render();
-		this->metronome->checkTick();
 		this->waitForNextFrame(currentFrameStartTime);
 		previousFrameStartTime = currentFrameStartTime;
 	}
 };
+
+void CoreImpl::update() {
+	switch (this->state)
+	{
+	case MENU:
+			break;
+	case SHOW:
+			break;
+	case PLAY:
+			break;
+	case PAUSE:
+			break;
+	case GAMEOVER:
+			break;
+	}
+}
 
 void CoreImpl::waitForNextFrame(long startTime) {
 	long elapsed = this->clock.getElapsedTime().asMilliseconds() - startTime;
@@ -39,13 +52,13 @@ void CoreImpl::startGame() {
 };
 
 void CoreImpl::setMetronome(int bpm) {
-	// TODO
+	this->metronome = new MetronomeImpl(bpm);
 };
 
-void CoreImpl::setJukebox(Jukebox jukebox) {
-	// TODO
+void CoreImpl::setJukebox(Jukebox *jukebox) {
+	this->jukebox = jukebox;
 };
 
-void CoreImpl::setWorld(World world) {
-	// TODO
+void CoreImpl::setWorld(World *world) {
+	this->world = world;
 };

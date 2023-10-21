@@ -7,6 +7,8 @@
 #include "Metronome.h"
 #include <SFML/system.hpp>
 
+enum gameState { MENU, SHOW, PLAY, PAUSE, GAMEOVER };
+
 class Core {
 public:
 	virtual void startGame() = 0;
@@ -21,15 +23,18 @@ private:
 	Jukebox *jukebox;
 	Metronome *metronome;
 	sf::Clock clock;
+	gameState state;
 
 	void gameLoop();
 	void waitForNextFrame(long startTime);
+	void update();
+
 public:
 	CoreImpl();
 	void startGame();
 	void setMetronome(int bpm);
-	void setJukebox(Jukebox soundSet);
-	void setWorld(World world);
+	void setJukebox(Jukebox *soundSet);
+	void setWorld(World *world);
 };
 
 #endif
