@@ -129,18 +129,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BeatImpl.cpp" />
     <ClCompile Include="BeatTheBaby.cpp" />
     <ClCompile Include="Core.h" />
     <ClCompile Include="CoreImpl.cpp" />
     <ClCompile Include="JukeboxImpl.cpp" />
     <ClCompile Include="Metronome.h" />
     <ClCompile Include="MetronomeImpl.cpp" />
+    <ClCompile Include="WaveImpl.cpp" />
+    <ClCompile Include="WorldImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Beat.h" />
     <ClInclude Include="Jukebox.h" />
+    <ClInclude Include="Wave.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

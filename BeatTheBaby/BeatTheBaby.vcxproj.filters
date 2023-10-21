@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Controller\impl">
       <UniqueIdentifier>{64510c01-285d-4535-ba95-63fe3be5dc16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Model\api">
+      <UniqueIdentifier>{b783595d-739a-4836-af07-2e7dd56376e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model\impl">
+      <UniqueIdentifier>{9a19d581-6f8e-43ae-b79d-1354da35405a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BeatTheBaby.cpp">
@@ -51,6 +57,15 @@
     <ClCompile Include="JukeboxImpl.cpp">
       <Filter>Source Files\Controller\impl</Filter>
     </ClCompile>
+    <ClCompile Include="WorldImpl.cpp">
+      <Filter>Source Files\Model\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveImpl.cpp">
+      <Filter>Source Files\Model\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="BeatImpl.cpp">
+      <Filter>Source Files\Model\impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -58,6 +73,15 @@
   <ItemGroup>
     <ClInclude Include="Jukebox.h">
       <Filter>Source Files\Controller\api</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Source Files\Model\api</Filter>
+    </ClInclude>
+    <ClInclude Include="Wave.h">
+      <Filter>Source Files\Model\api</Filter>
+    </ClInclude>
+    <ClInclude Include="Beat.h">
+      <Filter>Source Files\Model\api</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
