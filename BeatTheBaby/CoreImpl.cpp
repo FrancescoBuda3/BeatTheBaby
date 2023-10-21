@@ -1,11 +1,16 @@
 
 #include "Core.h"
+#include "Metronome.h"
 #include <iostream>
 
 #define PERIOD 1000 / 60
 
 
-
+CoreImpl::CoreImpl(){
+	//world = new WorldImpl();
+	//jukebox = new JukeboxImpl();
+	metronome = new MetronomeImpl(120);
+};
 
 void CoreImpl::gameLoop() {
 	long previousFrameStartTime = 0;
@@ -16,7 +21,7 @@ void CoreImpl::gameLoop() {
 		//this.processInput();
 		//this.update(elapsed);
 		//this.render();
-		std::cout << "Elapsed: " << elapsed << std::endl;
+		this->metronome->checkTick();
 		this->waitForNextFrame(currentFrameStartTime);
 		previousFrameStartTime = currentFrameStartTime;
 	}
@@ -27,13 +32,6 @@ void CoreImpl::waitForNextFrame(long startTime) {
 	if (elapsed < PERIOD) {
 		sf::sleep(sf::milliseconds(PERIOD - elapsed));
 	}	
-};
-
-
-CoreImpl::CoreImpl() {
-	//world = new WorldImpl();
-	//jukebox = new JukeboxImpl();
-	//metronome = new MetronomeImpl();
 };
 
 void CoreImpl::startGame() {

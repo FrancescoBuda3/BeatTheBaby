@@ -17,9 +17,9 @@ public:
 
 class CoreImpl : public Core {
 private:
-	World world;
-	Jukebox jukebox;
-	Metronome metronome;
+	World *world;
+	Jukebox *jukebox;
+	Metronome *metronome;
 	sf::Clock clock;
 
 	void gameLoop();
