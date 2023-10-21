@@ -25,13 +25,39 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{00972ef6-ef99-41f2-a134-b74504142863}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Controller\api">
+      <UniqueIdentifier>{40f2ceb2-80a3-4f98-91f6-d453c41d4b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controller\impl">
+      <UniqueIdentifier>{64510c01-285d-4535-ba95-63fe3be5dc16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BeatTheBaby.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core.h">
+      <Filter>Source Files\Controller\api</Filter>
+    </ClCompile>
+    <ClCompile Include="CoreImpl.cpp">
+      <Filter>Source Files\Controller\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="Metronome.h">
+      <Filter>Source Files\Controller\api</Filter>
+    </ClCompile>
+    <ClCompile Include="MetronomeImpl.cpp">
+      <Filter>Source Files\Controller\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="JukeboxImpl.cpp">
+      <Filter>Source Files\Controller\impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Jukebox.h">
+      <Filter>Source Files\Controller\api</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

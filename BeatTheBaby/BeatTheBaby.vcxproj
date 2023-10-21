@@ -130,9 +130,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BeatTheBaby.cpp" />
+    <ClCompile Include="Core.h" />
+    <ClCompile Include="CoreImpl.cpp" />
+    <ClCompile Include="JukeboxImpl.cpp" />
+    <ClCompile Include="Metronome.h" />
+    <ClCompile Include="MetronomeImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Jukebox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
