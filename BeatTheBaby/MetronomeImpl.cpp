@@ -2,7 +2,7 @@
 
 
 
-MetronomeImpl::MetronomeImpl(float bpm) {
+MetronomeImpl::MetronomeImpl(int bpm) {
 	this->bpm = bpm;
 	this->timeUnit = (60/bpm) * 1000;
 	this->clock.restart();
@@ -23,10 +23,10 @@ bool MetronomeImpl::checkTick() {
 }
 
 float MetronomeImpl::getPos() {
-	return this->clock.getElapsedTime().asMilliseconds()/this->timeUnit;
+	return this->clock.getElapsedTime().asMilliseconds()/(float)this->timeUnit;
 }
 
-float MetronomeImpl::getBpm() {
+int MetronomeImpl::getBpm() {
 	return this->bpm;
 }
 

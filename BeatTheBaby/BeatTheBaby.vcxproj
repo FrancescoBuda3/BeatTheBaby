@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="BeatImpl.cpp" />
     <ClCompile Include="BeatTheBaby.cpp" />
+    <ClCompile Include="BuzzJmpl.cpp" />
     <ClCompile Include="Core.h" />
     <ClCompile Include="CoreImpl.cpp" />
     <ClCompile Include="JukeboxImpl.cpp" />
@@ -144,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Beat.h" />
+    <ClInclude Include="Buzz.h" />
     <ClInclude Include="Jukebox.h" />
     <ClInclude Include="Wave.h" />
     <ClInclude Include="World.h" />

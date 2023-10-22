@@ -8,21 +8,21 @@
 class Metronome {
 public:
 	virtual float getPos() = 0;
-	virtual float getBpm() = 0;
+	virtual int getBpm() = 0;
 	virtual bool checkTick() = 0;
 };
 
 class MetronomeImpl : public Metronome {
 private:
-	float bpm;
+	int bpm;
 	long timeUnit; //in milliseconds
 	sf::Clock clock;
 	sf::Sound tick;
 	sf::SoundBuffer *tickBuffer;
 public:
-	MetronomeImpl(float bpm);
+	MetronomeImpl(int bpm);
 	float getPos();
-	float getBpm();
+	int getBpm();
 	bool checkTick();
 	
 };

@@ -66,6 +66,9 @@
     <ClCompile Include="BeatImpl.cpp">
       <Filter>Source Files\Model\impl</Filter>
     </ClCompile>
+    <ClCompile Include="BuzzJmpl.cpp">
+      <Filter>Source Files\Controller\impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="Beat.h">
       <Filter>Source Files\Model\api</Filter>
+    </ClInclude>
+    <ClInclude Include="Buzz.h">
+      <Filter>Source Files\Controller\api</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

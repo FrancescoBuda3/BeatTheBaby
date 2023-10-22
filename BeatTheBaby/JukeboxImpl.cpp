@@ -1,8 +1,8 @@
 #include "Jukebox.h"
 
 JukeboxImpl::JukeboxImpl(std::string tickFile, std::string boomFile, std::string clapFile,
-						 std::string yesFile, std::string noFile, std::string gameOverFile) {
-	
+	std::string yesFile, std::string noFile, std::string gameOverFile) {
+
 	if (!this->tickBuffer.loadFromFile(tickFile)) {
 		std::cout << "Error loading file" << std::endl;
 	}
@@ -32,5 +32,33 @@ JukeboxImpl::JukeboxImpl(std::string tickFile, std::string boomFile, std::string
 		std::cout << "Error loading file" << std::endl;
 	}
 	this->gameOver = sf::Sound(this->gameOverBuffer);
+};
+
+void JukeboxImpl::playTick() {
+	// TODO
+};
+
+void JukeboxImpl::playBoom() {
+	// TODO
+};
+
+void JukeboxImpl::playClap() {
+	// TODO
 }
+
+void JukeboxImpl::playYes() {
+	// TODO
+}
+
+void JukeboxImpl::playNo() {
+	// TODO
+}
+
+void JukeboxImpl::playGameOver() {
+	// TODO
+}
+
+
+
+
 
