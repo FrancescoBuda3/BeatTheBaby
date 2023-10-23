@@ -137,7 +137,6 @@
     <ClCompile Include="JukeboxImpl.cpp" />
     <ClCompile Include="Metronome.h" />
     <ClCompile Include="MetronomeImpl.cpp" />
-    <ClCompile Include="WaveImpl.cpp" />
     <ClCompile Include="WorldImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,8 +145,8 @@
   <ItemGroup>
     <ClInclude Include="Beat.h" />
     <ClInclude Include="Buzz.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Jukebox.h" />
-    <ClInclude Include="Wave.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
