@@ -16,7 +16,7 @@ public:
 
 class WorldImpl : public World {
 private:
-	std::list<Beat> currentWave;
+	std::list<BeatImpl> currentWave;
 	int lives;
 	long score;
 public:
@@ -26,6 +26,7 @@ public:
 	long getScore();
 	int getLives();
 	void generateNextWave();
+	bool isWaveOver();
 };
 
 #endif

@@ -6,6 +6,7 @@
 #include "World.h"
 #include "Metronome.h"
 #include "Buzz.h"
+#include "Beat.h"
 #include <SFML/system.hpp>
 
 enum gameState { MENU, SHOW, PLAY, PAUSE, GAMEOVER };
