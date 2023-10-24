@@ -1,30 +1,53 @@
 #include "World.h"
 
 WorldImpl::WorldImpl() {
-	// TODO
+	this->lives = LIVES;
+	this->score = 0;
+	this->timeLine = {};
 };
 
 Score WorldImpl::clap(float pos) {
-	// TODO
-	return GOOD;
+	if (this->timeLine.size() == 0) {
+		return Score::MISS;
+	}
+	else {
+		Score ret = this->timeLine.front().checkClap(pos);
+		if (ret == Score::MISS) {
+			this->lives == 0? this->lives = 0 : this->lives--;
+		}
+		else {
+			this->score += ret;
+		}
+		if (this->timeLine.front().isFinished()) {
+			this->timeLine.pop_front();
+		}
+		return ret;
+	}
 };
 
 std::list<float> WorldImpl::getTimeline() {
-	// TODO
-	return {};
+	std::list<float> ret = {};
+	for (BeatImpl beat : this->timeLine) {
+		std::list<float> tmp = beat.getClapTimings();
+		ret.insert(ret.end(), tmp.begin(), tmp.end());
+	}
 };
 
 long WorldImpl::getScore() {
-	// TODO
-	return 0;
+	return this->score;
 };
 
 int WorldImpl::getLives() {
-	// TODO
-	return 0;
+	return this->lives;
 };
 
-void WorldImpl::generateNextWave() {
-	// TODO
+void WorldImpl::generateNextTimeline() {
+	for (int i = 0; i < TIMELINE_SIZE; i++) {
+		this->timeLine.push_back(*BeatImpl::generateRandom());
+	}
+};
+
+bool WorldImpl::isTimelineOver() {
+	return this->timeLine.size() == 0;
 };
 

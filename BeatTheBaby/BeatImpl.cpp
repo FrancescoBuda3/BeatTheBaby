@@ -6,7 +6,7 @@ BeatImpl::BeatImpl(std::list<float> clapTimings) {
 
 Score BeatImpl::checkClap(float timing) {
 	if (this->isFinished()) {
-		return Score::MISS;
+		return Score::NONE;
 	}
 	float tmp = this->clapTimings.front();
 	this->clapTimings.pop_front();
@@ -30,7 +30,7 @@ std::list<float> BeatImpl::getClapTimings() {
 	return std::list<float>(this->clapTimings);
 };
 
-BeatImpl* BeatImpl::generateRandom() {
+BeatImpl *BeatImpl::generateRandom() {
 
 	std::list<float> ret = std::list<float>();
 

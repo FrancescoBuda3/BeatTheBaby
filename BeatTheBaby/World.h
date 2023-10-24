@@ -5,18 +5,21 @@
 #include "Beat.h"
 #include <list>
 
+#define LIVES 3
+#define TIMELINE_SIZE 3
+
 class World {
 public:
 	virtual Score clap(float pos) = 0;
 	virtual std::list<float> getTimeline() = 0;
 	virtual long getScore() = 0;
 	virtual int getLives() = 0;
-	virtual void generateNextWave() = 0;
+	virtual void generateNextTimeline() = 0;
 };
 
 class WorldImpl : public World {
 private:
-	std::list<BeatImpl> currentWave;
+	std::list<BeatImpl> timeLine;
 	int lives;
 	long score;
 public:
@@ -25,8 +28,8 @@ public:
 	std::list<float> getTimeline();
 	long getScore();
 	int getLives();
-	void generateNextWave();
-	bool isWaveOver();
+	void generateNextTimeline();
+	bool isTimelineOver();
 };
 
 #endif
