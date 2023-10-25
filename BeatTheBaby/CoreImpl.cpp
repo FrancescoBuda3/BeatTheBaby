@@ -11,11 +11,15 @@
 CoreImpl::CoreImpl(){
 	metronome = new MetronomeImpl(120);
 	buzz = new BuzzImpl();
+	jukebox = new JukeboxImpl("./Audio/tick.wav", "./Audio/boom.wav", "./Audio/clap.wav", "./Audio/yes.wav", "./Audio/no.wav", "./Audio/gameover.wav");
+	world = new WorldImpl();
+	view = new ViewImpl();
+	state = MENU;
 };
 
 void CoreImpl::gameLoop() {
 	long previousFrameStartTime = 0;
-	this->clock.restart();
+	this->initGame();
 	//variabili provvisorie
 	/*sf::SoundBuffer tickBuffer;
 	if (!tickBuffer.loadFromFile("./Audio/tick.wav")) {
@@ -28,8 +32,7 @@ void CoreImpl::gameLoop() {
 	while (true /*provvisorio*/) {
 		long currentFrameStartTime = this->clock.getElapsedTime().asMilliseconds(); 
 		long elapsed = currentFrameStartTime - previousFrameStartTime;
-		this->processInput();
-		//this.update(elapsed);
+		this->update();
 		//this.render();
 		
 		// suona a ritmo
@@ -47,19 +50,89 @@ void CoreImpl::gameLoop() {
 };
 
 void CoreImpl::update() {
+	if (this->metronome->checkTick()) {
+		this->jukebox->playTick();
+		this->view->notifyTick();
+		this->tickCount++;
+	}
 	switch (this->state)
 	{
-	case MENU:
-			break;
-	case SHOW:
-			break;
-	case PLAY:
-			break;
-	case PAUSE:
-			break;
-	case GAMEOVER:
-			break;
+	case(MENU):
+		//std::cout << "menu" << std::endl;
+		if (this->buzz->checkClick()) {
+			this->state = INTRO;
+			this->metronome->start();
+			this->view->showGame();
+		}
+		break;
+	case(INTRO):
+		if(this->tickCount = INTRO_TIME) {
+			this->state = SHOW;
+			this->tickCount = 0;
+			*this->timeline = this->world->getTimeline();
+		}
+		break;
+	case(SHOW):
+		if (this->tickCount = FEEDBACK_TIME) {
+			this->view->notifyYes();
+		}
+		if (this->tickCount = SHOW_TIME) {
+			this->state = PLAY;
+			this->tickCount = 0;
+			this->view->notifyYes();
+			delete timeline;
+			missed = false;
+		}
+		else if (timeline->size() != 0 && this->metronome->getPos() >= timeline->front()) {
+			this->jukebox->playBoom();
+			this->view->notifyBoom(this->timeline->front());
+			this->timeline->pop_front();
+		}
+		break;
+	case(PLAY):
+		if (tickCount = PLAY_TIME) {
+			this->state = FEEDBACK;
+			this->tickCount = 0;
+			if (this->missed) {
+				this->view->notifyNo();
+			}
+			else {
+				this->view->notifyYes();
+			}
+		}
+		else if (this->buzz->checkClick()) {
+			this->jukebox->playClap();
+			Score score = this->world->clap(this->metronome->getPos());
+			this->view->notifyClap(score);
+			if (score == MISS) {
+				this->missed = true;
+			}	
+		}
+		break;
+
+	case(FEEDBACK):
+		if (this->tickCount = FEEDBACK_END_TIME) {
+			this->tickCount = 0;
+			this->view->notifyScore(this->world->getScore());
+			this->view->notifyLives(this->world->getLives());
+			if (this->world->getLives() == 0) {
+				this->state = GAMEOVER;
+				this->view->showGameOver();
+			}
+			else {
+				this->state = SHOW;
+			}
+		}
+		break;
+
+	case(GAMEOVER):
+		if (this->buzz->checkClick()) {
+			this->state = MENU;
+			this->view->showMenu();
+		}
+		break;
 	}
+	
 }
 
 void CoreImpl::waitForNextFrame(long startTime) {
@@ -67,6 +140,13 @@ void CoreImpl::waitForNextFrame(long startTime) {
 	if (elapsed < PERIOD) {
 		sf::sleep(sf::milliseconds(PERIOD - elapsed));
 	}	
+};
+
+void CoreImpl::initGame() {
+	this->clock.restart();
+	this->view->showMenu();
+	this->state = MENU;
+	this->world->generateNextTimeline();
 };
 
 void CoreImpl::startGame() {
@@ -89,8 +169,5 @@ void CoreImpl::setBuzz(Buzz* buzz) {
 	this->buzz = buzz;
 };
 
-void CoreImpl::processInput() {
-	if (this->buzz->checkClick()) {
-		std::cout << "Buzzed!" << std::endl;
-	}
-};
+
+

@@ -4,19 +4,16 @@
 
 MetronomeImpl::MetronomeImpl(int bpm) {
 	this->bpm = bpm;
-	this->timeUnit = (60.0f/bpm) * 1000;
-	this->clock.restart();
-	this->tickBuffer = new sf::SoundBuffer();
-	if (!this->tickBuffer->loadFromFile("./Audio/tick.wav")) {
-		std::cout << "Error loading tick.wav" << std::endl;
-	}
-	this->tick = sf::Sound(*this->tickBuffer);
+	this->timeUnit = std::round((60.0f/bpm) * 1000.0f);
+	this->started = false;
 }
 
 bool MetronomeImpl::checkTick() {
+	if (!this->started) {
+		return false;
+	}
 	if (this->clock.getElapsedTime().asMilliseconds() >= this->timeUnit) {
 		this->clock.restart();
-		//this->tick.play();
 		return true;
 	}
 	return false;
@@ -28,6 +25,11 @@ float MetronomeImpl::getPos() {
 
 int MetronomeImpl::getBpm() {
 	return this->bpm;
+}
+
+void MetronomeImpl::start() {
+	this->clock.restart();
+	this->started = true;
 }
 
 

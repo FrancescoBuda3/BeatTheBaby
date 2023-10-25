@@ -5,6 +5,7 @@
 #include <iostream>
 
 class Jukebox {
+public:
 	virtual void playTick() = 0;
 	virtual void playBoom() = 0;
 	virtual void playClap() = 0;

@@ -8,7 +8,7 @@ WorldImpl::WorldImpl() {
 
 Score WorldImpl::clap(float pos) {
 	if (this->timeLine.size() == 0) {
-		return Score::MISS;
+		return Score::NONE;
 	}
 	else {
 		Score ret = this->timeLine.front().checkClap(pos);
@@ -31,6 +31,7 @@ std::list<float> WorldImpl::getTimeline() {
 		std::list<float> tmp = beat.getClapTimings();
 		ret.insert(ret.end(), tmp.begin(), tmp.end());
 	}
+	return ret;
 };
 
 long WorldImpl::getScore() {

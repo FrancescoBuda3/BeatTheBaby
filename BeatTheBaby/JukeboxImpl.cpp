@@ -35,27 +35,28 @@ JukeboxImpl::JukeboxImpl(std::string tickFile, std::string boomFile, std::string
 };
 
 void JukeboxImpl::playTick() {
-	// TODO
+	this->tick.play();
 };
 
 void JukeboxImpl::playBoom() {
-	// TODO
+	this->boom.play();
 };
 
 void JukeboxImpl::playClap() {
-	// TODO
-}
+	this->clap.play();
+};
 
 void JukeboxImpl::playYes() {
-	// TODO
+	this->yes.play();
+		
 }
 
 void JukeboxImpl::playNo() {
-	// TODO
+	this->no.play();
 }
 
 void JukeboxImpl::playGameOver() {
-	// TODO
+	this->gameOver.play();
 }
 
 
