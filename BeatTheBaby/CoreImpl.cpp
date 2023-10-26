@@ -9,7 +9,7 @@
 
 
 CoreImpl::CoreImpl(){
-	metronome = new MetronomeImpl(60);
+	metronome = new MetronomeImpl(100);
 	buzz = new BuzzImpl();
 	jukebox = new JukeboxImpl("./Audio/tick.wav", "./Audio/boom.wav", "./Audio/clap.wav", "./Audio/yes.wav", "./Audio/no.wav", "./Audio/gameover.wav");
 	world = new WorldImpl();

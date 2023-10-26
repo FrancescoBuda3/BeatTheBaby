@@ -6,8 +6,8 @@
 #include <random>
 #include <iostream>
 
-#define GOOD_TOLLERANCE 0.1 
-#define PERFECT_TOLLERANCE 0.05 
+#define GOOD_TOLLERANCE 0.2
+#define PERFECT_TOLLERANCE 0.1 
 #define TRIPLET_RATE 17.0f/100 //17% of the beats are triplets
 #define DENSITY 1.0f/2 
 
