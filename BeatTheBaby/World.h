@@ -19,7 +19,7 @@ public:
 
 class WorldImpl : public World {
 private:
-	std::list<BeatImpl> timeLine;
+	std::list<BeatImpl*> timeLine;
 	int lives;
 	long score;
 public:

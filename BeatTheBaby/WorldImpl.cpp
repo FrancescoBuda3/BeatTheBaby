@@ -11,14 +11,14 @@ Score WorldImpl::clap(float pos) {
 		return Score::NONE;
 	}
 	else {
-		Score ret = this->timeLine.front().checkClap(pos);
+		Score ret = this->timeLine.front()->checkClap(pos);
 		if (ret == Score::MISS) {
 			this->lives == 0? this->lives = 0 : this->lives--;
 		}
 		else {
 			this->score += ret;
 		}
-		if (this->timeLine.front().isFinished()) {
+		if (this->timeLine.front()->isFinished()) {
 			this->timeLine.pop_front();
 		}
 		return ret;
@@ -27,9 +27,13 @@ Score WorldImpl::clap(float pos) {
 
 std::list<float> WorldImpl::getTimeline() {
 	std::list<float> ret = {};
-	for (BeatImpl beat : this->timeLine) {
-		std::list<float> tmp = beat.getClapTimings();
-		ret.insert(ret.end(), tmp.begin(), tmp.end());
+	float i = 0;
+	for (BeatImpl *beat : this->timeLine) {
+		std::list<float> tmp = beat->getClapTimings();
+		for (float f : tmp) {
+			ret.push_back(f + i);
+		}
+		i = i+1;
 	}
 	return ret;
 };
@@ -44,7 +48,7 @@ int WorldImpl::getLives() {
 
 void WorldImpl::generateNextTimeline() {
 	for (int i = 0; i < TIMELINE_SIZE; i++) {
-		this->timeLine.push_back(*BeatImpl::generateRandom());
+		this->timeLine.push_back(BeatImpl::generateRandom());
 	}
 };
 
