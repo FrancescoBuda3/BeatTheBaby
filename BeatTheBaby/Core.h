@@ -13,7 +13,7 @@
 
 #define INTRO_TIME 5 //in metronome ticks
 #define SHOW_TIME 3 //in metronome ticks
-#define PLAY_TIME 3 //in metronome ticks
+#define PLAY_TIME 4 //in metronome ticks
 #define DELAY_TIME 1 //in metronome ticks
 #define FEEDBACK_TIME 1 //in metronome ticks
 

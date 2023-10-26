@@ -5,7 +5,7 @@
 #include "Beat.h"
 #include <list>
 
-#define LIVES 3
+#define LIVES 5
 #define TIMELINE_SIZE 3
 
 class World {
@@ -15,6 +15,7 @@ public:
 	virtual long getScore() = 0;
 	virtual int getLives() = 0;
 	virtual void generateNextTimeline() = 0;
+	virtual void reset() = 0;
 };
 
 class WorldImpl : public World {
@@ -30,6 +31,7 @@ public:
 	int getLives();
 	void generateNextTimeline();
 	bool isTimelineOver();
+	void reset();
 };
 
 #endif

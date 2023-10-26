@@ -56,3 +56,8 @@ bool WorldImpl::isTimelineOver() {
 	return this->timeLine.size() == 0;
 };
 
+void WorldImpl::reset() {
+	this->lives = LIVES;
+	this->score = 0;
+};
+
