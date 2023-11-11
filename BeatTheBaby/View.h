@@ -6,6 +6,8 @@
 class View {
 
 public:
+	virtual void init() = 0;
+	virtual void drawScene() = 0;
 	virtual void showMenu() = 0;
 	virtual void showGame() = 0;
 	virtual void showGameOver() = 0;
@@ -20,6 +22,8 @@ public:
 
 class ViewImpl : public View {
 public:
+	void init();
+	void drawScene();
 	void showMenu();
 	void showGame();
 	void showGameOver();

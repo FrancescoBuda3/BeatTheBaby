@@ -23,30 +23,11 @@ CoreImpl::CoreImpl(){
 void CoreImpl::gameLoop() {
 	long previousFrameStartTime = 0;
 	this->initGame();
-	//variabili provvisorie
-	/*sf::SoundBuffer tickBuffer;
-	if (!tickBuffer.loadFromFile("./Audio/tick.wav")) {
-		std::cout << "Error loading tick.wav" << std::endl;
-	}
-	sf::Sound tickSound;
-    tickSound.setBuffer(tickBuffer);
-	Beat *beat = BeatImpl::generateRandom();
-	std::list<float> timeline = beat->getClapTimings();*/
 	while (true /*provvisorio*/) {
 		long currentFrameStartTime = this->clock.getElapsedTime().asMilliseconds(); 
 		long elapsed = currentFrameStartTime - previousFrameStartTime;
 		this->update();
 		//this.render();
-		
-		// suona a ritmo
-		/*if (timeline.size() == 0 && this->metronome->checkTick()) {
-			beat = BeatImpl::generateRandom();
-			timeline = beat->getClapTimings();
-		}
-		if (timeline.size() != 0 && this->metronome->getPos() >= timeline.front()) {
-			timeline.pop_front();
-			tickSound.play();
-		}*/
 		this->waitForNextFrame(currentFrameStartTime);
 		previousFrameStartTime = currentFrameStartTime;
 	}

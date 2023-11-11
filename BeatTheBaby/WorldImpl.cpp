@@ -14,6 +14,7 @@ Score WorldImpl::clap(float pos) {
 		Score ret = this->timeLine.front()->checkClap(pos);
 		if (ret == Score::MISS) {
 			this->lives == 0? this->lives = 0 : this->lives--;
+			std::cout << "Missed! Lives: " << this->lives << std::endl;
 		}
 		else {
 			this->score += ret;
