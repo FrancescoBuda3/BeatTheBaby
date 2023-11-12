@@ -4,174 +4,224 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+
 
 #define PERIOD 1000 / 60
 
+long previousFrameStartTime = 0;
+sf::Clock clock_c;
+World* world_c;
+Jukebox* jukebox_c;
+Metronome* metronome_c;
+gameState state_c;
+Buzz* buzz_c;
+View* view_c;
+std::list<float>* timeline_c;
+int tickCount_c;
+bool missed_c;
 
 CoreImpl::CoreImpl(){
-	metronome = new MetronomeImpl(100);
-	buzz = new BuzzImpl();
-	jukebox = new JukeboxImpl("./Audio/tick.wav", "./Audio/boom.wav", "./Audio/clap.wav", "./Audio/yes.wav", "./Audio/no.wav", "./Audio/gameover.wav");
-	world = new WorldImpl();
-	view = new ViewImpl();
-	state = MENU;
-	tickCount = 0;
-	missed = false;
-	timeline = {};
+	metronome_c = new MetronomeImpl(100);
+	buzz_c = new BuzzImpl();
+	jukebox_c = new JukeboxImpl("./Audio/tick.wav", "./Audio/boom.wav", "./Audio/clap.wav", "./Audio/yes.wav", "./Audio/no.wav", "./Audio/gameover.wav");
+	world_c = new WorldImpl();
+	view_c = new ViewImpl();
+	state_c = MENU;
+	tickCount_c = 0;
+	missed_c = false;
+	timeline_c = {};
+	previousFrameStartTime = 0;
 };
 
-void CoreImpl::gameLoop() {
-	long previousFrameStartTime = 0;
+void CoreImpl::gameLoop(int value) {
+	/*long previousFrameStartTime = 0;
 	this->initGame();
-	while (true /*provvisorio*/) {
+	while (true) {
 		long currentFrameStartTime = this->clock.getElapsedTime().asMilliseconds(); 
 		long elapsed = currentFrameStartTime - previousFrameStartTime;
 		this->update();
 		//this.render();
 		this->waitForNextFrame(currentFrameStartTime);
 		previousFrameStartTime = currentFrameStartTime;
-	}
-};
+	}*/
+	long currentFrameStartTime = clock_c.getElapsedTime().asMilliseconds();
+	long elapsed = currentFrameStartTime - previousFrameStartTime;
+	update();
+	//glutPostRedisplay();
+	
+	previousFrameStartTime = currentFrameStartTime;
+	waitForNextFrame(currentFrameStartTime);
+
+}
 
 void CoreImpl::update() {
-	if (this->metronome->checkTick()) {
-		this->jukebox->playTick();
-		this->view->notifyTick();
-		this->tickCount++;
+	if (metronome_c->checkTick()) {
+		jukebox_c->playTick();
+		view_c->notifyTick();
+		tickCount_c++;
 		//std::cout << "tick" << std::endl;
 	}
-	switch (this->state)
+	switch (state_c)
 	{
 	case(MENU):
-		if (this->buzz->checkClick()) {
+		if (buzz_c->checkClick()) {
 			//std::cout << "intro" << std::endl;
-			this->state = INTRO;
-			this->metronome->start();
-			this->view->showGame();
-			this->tickCount = 0;
+			state_c = INTRO;
+			metronome_c->start();
+			view_c->showGame();
+			tickCount_c = 0;
 		}
 		break;
 	case(INTRO):
-		if(this->tickCount == INTRO_TIME) {
+		if(tickCount_c == INTRO_TIME) {
 			//std::cout << "show" << std::endl;
-			this->state = SHOW;
-			this->tickCount = 0;
-			this->world->reset();
-			this->timeline = new std::list<float>(this->world->getTimeline());
+			state_c = SHOW;
+			tickCount_c = 0;
+			world_c->reset();
+			timeline_c = new std::list<float>(world_c->getTimeline());
 		}
 		break;
 	case(SHOW):
-		if (this->tickCount == SHOW_TIME) {
+		if (tickCount_c == SHOW_TIME) {
 			//std::cout << "yes" << std::endl;
-			this->view->notifyYes();
-			this->jukebox->playYes();
-			this->state = DELAY;
-			this->tickCount = 0;
+			view_c->notifyYes();
+			jukebox_c->playYes();
+			state_c = DELAY;
+			tickCount_c = 0;
 		}
-		else if (timeline->size() != 0 && this->metronome->getPos() >= timeline->front() - this->tickCount) {
+		else if (timeline_c->size() != 0 && metronome_c->getPos() >= timeline_c->front() - tickCount_c) {
 			//std::cout << "boom" << std::endl;
-			this->jukebox->playBoom();
-			this->view->notifyBoom(this->timeline->front());
-			this->timeline->pop_front();
+			jukebox_c->playBoom();
+			view_c->notifyBoom(timeline_c->front());
+			timeline_c->pop_front();
 		}
 		break;
 	case (DELAY):
-		if (this->metronome->getPos() > 0.5) {
+		if (metronome_c->getPos() > 0.5) {
 			//std::cout << "play" << std::endl;
-			this->state = PLAY;
-			this->tickCount = 0;
-			delete timeline;
-			missed = false;
+			state_c = PLAY;
+			tickCount_c = 0;
+			delete timeline_c;
+			missed_c = false;
 		}
 		break;
 	case(PLAY):
-		if (tickCount == PLAY_TIME) {
-			this->world->generateNextTimeline();
+		if (tickCount_c == PLAY_TIME) {
+			world_c->generateNextTimeline();
 			//std::cout << "feedback" << std::endl;
-			this->state = FEEDBACK;
-			this->tickCount = 0;
-			if (this->missed) {
-				this->view->notifyNo();
-				this->jukebox->playNo();
+			state_c = FEEDBACK;
+			tickCount_c = 0;
+			if (missed_c) {
+				view_c->notifyNo();
+				jukebox_c->playNo();
 			}
 			else {
-				this->view->notifyYes();
-				this->jukebox->playYes();
+				view_c->notifyYes();
+				jukebox_c->playYes();
 			}
 		}
-		else if (this->buzz->checkClick()) {
-			this->jukebox->playClap();
-			Score score = this->world->clap(this->metronome->getPos());
-			this->view->notifyClap(score);
+		else if (buzz_c->checkClick()) {
+			jukebox_c->playClap();
+			Score score = world_c->clap(metronome_c->getPos());
+			view_c->notifyClap(score);
 			if (score == MISS) {
-				this->missed = true;
+				missed_c = true;
 			}	
 		}
 		break;
 
 	case(FEEDBACK):
-		if (this->tickCount == FEEDBACK_TIME) {
-			this->tickCount = 0;
-			this->timeline = new std::list<float>(this->world->getTimeline());
-			this->view->notifyScore(this->world->getScore());
-			this->view->notifyLives(this->world->getLives());
-			std::cout << "score: " << this->world->getScore() << std::endl;
-			if (this->world->getLives() == 0) {
+		if (tickCount_c == FEEDBACK_TIME) {
+			tickCount_c = 0;
+			timeline_c = new std::list<float>(world_c->getTimeline());
+			view_c->notifyScore(world_c->getScore());
+			view_c->notifyLives(world_c->getLives());
+			std::cout << "score: " << world_c->getScore() << std::endl;
+			if (world_c->getLives() == 0) {
 				std::cout << "gameover" << std::endl;
-				this->state = GAMEOVER;
-				this->view->showGameOver();
+				state_c = GAMEOVER;
+				view_c->showGameOver();
 			}
 			else {
 				//std::cout << "show" << std::endl;
-				this->state = SHOW;
+				state_c = SHOW;
 			}
 		}
 		break;
 
 	case(GAMEOVER):
-		if (this->buzz->checkClick()) {
+		if (buzz_c->checkClick()) {
 			//std::cout << "menu" << std::endl;
-			this->state = MENU;
-			this->view->showMenu();
+			state_c = MENU;
+			view_c->showMenu();
 		}
 		break;
 	}
 	
 }
 
-void CoreImpl::waitForNextFrame(long startTime) {
-	long elapsed = this->clock.getElapsedTime().asMilliseconds() - startTime;
+void CoreImpl::waitForNextFrame(long startTime)
+{
+	long elapsed = clock_c.getElapsedTime().asMilliseconds() - startTime;
 	if (elapsed < PERIOD) {
-		sf::sleep(sf::milliseconds(PERIOD - elapsed));
-	}	
-};
+		//sf::sleep(sf::milliseconds(PERIOD - elapsed));
+		glutTimerFunc(PERIOD - elapsed, &CoreImpl::gameLoop, 0);
+	}
+	else {
+		glutTimerFunc(0, &CoreImpl::gameLoop, 0);
+	}
+}
 
-void CoreImpl::initGame() {
-	this->clock.restart();
-	this->view->showMenu();
-	this->state = MENU;
-	this->world->generateNextTimeline();
-};
 
-void CoreImpl::startGame() {
-	this->gameLoop();
+void CoreImpl::initGame(int argc, char* argv[]) {
+	//provv
+	glutInit(&argc, argv);
+	glutInitContextVersion(4, 0);
+	glutInitContextProfile(GLUT_CORE_PROFILE);
+
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+
+	glutInitWindowSize(200, 200);
+	glutInitWindowPosition(100, 100);
+	glutCreateWindow("Modellazione Scena 2D");
+	glewInit();
+	
+
+	//end provv
+
+	clock_c.restart();
+	view_c->showMenu();
+	state_c = MENU;
+	world_c->generateNextTimeline();
+}
+
+void CoreImpl::startGame(int argc, char* argv[]) {
+	//this->gameLoop(0);
+	initGame(argc, argv);
+	glutTimerFunc(0, &CoreImpl::gameLoop, 0);
+	glutMainLoop();
 };
 
 void CoreImpl::setMetronome(int bpm) {
-	this->metronome = new MetronomeImpl(bpm);
+	metronome_c = new MetronomeImpl(bpm);
 };
 
 void CoreImpl::setJukebox(Jukebox *jukebox) {
-	this->jukebox = jukebox;
+	jukebox_c = jukebox;
 };
 
 void CoreImpl::setWorld(World *world) {
-	this->world = world;
+	world_c = world;
 };
 
 void CoreImpl::setBuzz(Buzz* buzz) {
-	this->buzz = buzz;
+	buzz_c = buzz;
 };
+
+
+
 
 
 

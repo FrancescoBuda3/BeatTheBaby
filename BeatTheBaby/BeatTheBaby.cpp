@@ -3,10 +3,10 @@
 #include <iostream>
 #include "Core.h"
 
-int main() {
+int main(int argc, char* argv[]) {
     
     Core *core = new CoreImpl();
-    core->startGame();
+    core->startGame(argc, argv);
 
     return 0;
 }

@@ -21,7 +21,7 @@ enum gameState { MENU, INTRO, SHOW, DELAY, FEEDBACK, PLAY, GAMEOVER };
 
 class Core {
 public:
-	virtual void startGame() = 0;
+	virtual void startGame(int argc, char* argv[]) = 0;
 	virtual void setMetronome(int bpm) = 0;
 	virtual void setJukebox(Jukebox *soundSet) = 0;
 	virtual void setWorld(World *world) = 0;
@@ -29,30 +29,18 @@ public:
 };
 
 class CoreImpl : public Core {
-private:
-	World *world;
-	Jukebox *jukebox;
-	Metronome *metronome;
-	sf::Clock clock;
-	gameState state;
-	Buzz *buzz;
-	View *view;
-	std::list<float> *timeline;
-	int tickCount;
-	bool missed;
-
-	void gameLoop();
-	void waitForNextFrame(long startTime);
-	void update();
-	void initGame();
-
+	
 public:
 	CoreImpl();
-	void startGame();
+	void initGame(int argc, char* argv[]);
+	void startGame(int argc, char* argv[]);
 	void setMetronome(int bpm);
 	void setJukebox(Jukebox *soundSet);
 	void setWorld(World *world);
 	void setBuzz(Buzz *buzz);
+	static void gameLoop(int value);
+	static void update();
+	static void waitForNextFrame(long startTime);
 };
 
 #endif

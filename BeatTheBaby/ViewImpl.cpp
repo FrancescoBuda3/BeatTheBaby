@@ -43,3 +43,11 @@ void ViewImpl::notifyLives(int lives) {
 
 }
 
+void ViewImpl::init() {
+
+}
+
+void ViewImpl::drawScene() {
+
+}
+
