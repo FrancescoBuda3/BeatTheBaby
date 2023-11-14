@@ -2,12 +2,13 @@
 #define __VIEW__
 
 #include "Common.h"
+#include "GestioneGeometria.h"
+#include "Lib.h"
 
 class View {
-
 public:
 	virtual void init() = 0;
-	virtual void drawScene() = 0;
+	//virtual void drawScene() = 0;
 	virtual void showMenu() = 0;
 	virtual void showGame() = 0;
 	virtual void showGameOver() = 0;
@@ -21,9 +22,15 @@ public:
 };
 
 class ViewImpl : public View {
+private:
+	
+
+	void crea_VAO_Vector(Shape* fig);
+
 public:
+	static void drawBooms();
 	void init();
-	void drawScene();
+	static void drawScene();
 	void showMenu();
 	void showGame();
 	void showGameOver();
@@ -34,6 +41,7 @@ public:
 	void notifyNo();
 	void notifyScore(long score);
 	void notifyLives(int lives);
+	void INIT_SHADER();
 };
 
 #endif 

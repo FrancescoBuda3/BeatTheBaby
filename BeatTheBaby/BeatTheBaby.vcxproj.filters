@@ -75,9 +75,21 @@
     <ClCompile Include="ViewImpl.cpp">
       <Filter>Source Files\View\impl</Filter>
     </ClCompile>
+    <ClCompile Include="Gestione_Geometria.cpp">
+      <Filter>Source Files\View\impl</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderMaker.cpp">
+      <Filter>Source Files\View\impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="vertexShader_M.glsl">
+      <Filter>Source Files\View\impl</Filter>
+    </None>
+    <None Include="fragmentShader_Onde_nuvole.glsl">
+      <Filter>Source Files\View\impl</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Jukebox.h">
@@ -96,6 +108,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="View.h">
+      <Filter>Source Files\View\api</Filter>
+    </ClInclude>
+    <ClInclude Include="GestioneGeometria.h">
+      <Filter>Source Files\View\api</Filter>
+    </ClInclude>
+    <ClInclude Include="Lib.h">
+      <Filter>Source Files\View\api</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderMaker.h">
       <Filter>Source Files\View\api</Filter>
     </ClInclude>
   </ItemGroup>

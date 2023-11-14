@@ -134,20 +134,27 @@
     <ClCompile Include="BuzzJmpl.cpp" />
     <ClCompile Include="Core.h" />
     <ClCompile Include="CoreImpl.cpp" />
+    <ClCompile Include="Gestione_Geometria.cpp" />
     <ClCompile Include="JukeboxImpl.cpp" />
     <ClCompile Include="Metronome.h" />
     <ClCompile Include="MetronomeImpl.cpp" />
+    <ClCompile Include="ShaderMaker.cpp" />
     <ClCompile Include="ViewImpl.cpp" />
     <ClCompile Include="WorldImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="fragmentShader_Onde_nuvole.glsl" />
     <None Include="packages.config" />
+    <None Include="vertexShader_M.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Beat.h" />
     <ClInclude Include="Buzz.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="GestioneGeometria.h" />
     <ClInclude Include="Jukebox.h" />
+    <ClInclude Include="Lib.h" />
+    <ClInclude Include="ShaderMaker.h" />
     <ClInclude Include="View.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>

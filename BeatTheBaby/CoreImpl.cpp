@@ -17,13 +17,13 @@ Jukebox* jukebox_c;
 Metronome* metronome_c;
 gameState state_c;
 Buzz* buzz_c;
-View* view_c;
+ViewImpl* view_c;
 std::list<float>* timeline_c;
 int tickCount_c;
 bool missed_c;
 
 CoreImpl::CoreImpl(){
-	metronome_c = new MetronomeImpl(100);
+	metronome_c = new MetronomeImpl(85);
 	buzz_c = new BuzzImpl();
 	jukebox_c = new JukeboxImpl("./Audio/tick.wav", "./Audio/boom.wav", "./Audio/clap.wav", "./Audio/yes.wav", "./Audio/no.wav", "./Audio/gameover.wav");
 	world_c = new WorldImpl();
@@ -178,19 +178,11 @@ void CoreImpl::waitForNextFrame(long startTime)
 void CoreImpl::initGame(int argc, char* argv[]) {
 	//provv
 	glutInit(&argc, argv);
-	glutInitContextVersion(4, 0);
-	glutInitContextProfile(GLUT_CORE_PROFILE);
-
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-
-	glutInitWindowSize(200, 200);
-	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Modellazione Scena 2D");
-	glewInit();
+	
 	
 
 	//end provv
-
+	view_c->init();
 	clock_c.restart();
 	view_c->showMenu();
 	state_c = MENU;
@@ -199,6 +191,7 @@ void CoreImpl::initGame(int argc, char* argv[]) {
 
 void CoreImpl::startGame(int argc, char* argv[]) {
 	//this->gameLoop(0);
+	cout << "start" << endl;
 	initGame(argc, argv);
 	glutTimerFunc(0, &CoreImpl::gameLoop, 0);
 	glutMainLoop();
