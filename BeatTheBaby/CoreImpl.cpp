@@ -49,7 +49,7 @@ void CoreImpl::gameLoop(int value) {
 	long currentFrameStartTime = clock_c.getElapsedTime().asMilliseconds();
 	long elapsed = currentFrameStartTime - previousFrameStartTime;
 	update();
-	//glutPostRedisplay();
+	glutPostRedisplay();
 	
 	previousFrameStartTime = currentFrameStartTime;
 	waitForNextFrame(currentFrameStartTime);

@@ -14,7 +14,7 @@ float w_update, h_update;
 int width = 1280;
 int height = 720;
 Shape circle;
-vector<float> booms = { 0.5 };
+vector<float> booms = {};
 
 void ViewImpl::showMenu() {
 	// TODO: Implement
@@ -33,7 +33,7 @@ void ViewImpl::notifyTick() {
 }
 
 void ViewImpl::notifyBoom(float pos) {
-	// TODO: Implement
+	booms.push_back(pos/3);
 }
 
 void ViewImpl::notifyClap(Score score) {
@@ -42,15 +42,15 @@ void ViewImpl::notifyClap(Score score) {
 }
 
 void ViewImpl::notifyYes() {
-
+	
 }
 
 void ViewImpl::notifyNo() {
-
+	
 }
 
 void ViewImpl::notifyScore(long score) {
-
+	booms.clear();
 }
 
 void ViewImpl::notifyLives(int lives) {
@@ -62,7 +62,7 @@ void ViewImpl::init() {
 	glutInitContextVersion(4, 0);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(100, 100);
@@ -77,6 +77,9 @@ void ViewImpl::init() {
 	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glutSetOption(GLUT_MULTISAMPLE, 16);
+	glEnable(GL_MULTISAMPLE);
 	
 	circle.nTriangles = 180;
 	circle.Model = mat4(1.0);
@@ -117,12 +120,6 @@ void ViewImpl::drawScene() {
 void ViewImpl::drawBooms() {
 	for (float boom : booms) {
 		mat4 mat = translate(circle.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), height/2, 0.0));
-		/*print mat*/
-		for (int i = 0; i < 4; i++) {
-			cout << mat[i][0] << " " << mat[i][1] << " " << mat[i][2] << " " << mat[i][3] << endl;
-		}
-
-
 		mat = scale(mat, vec3(20.5, 20.5, 1.0));
 		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
 		glUniform1i(locSceltafs, circle.sceltaFs);
