@@ -53,7 +53,7 @@ float DY(int i, float* t);
 void InterpolazioneHermite(float* t, Shape* Fig, vec4 color_top, vec4 color_bot);
 void costruisci_formaHermite(vec4 color_top, vec4 color_bot, Shape* forma);
 double  degtorad(double angle);
-void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Shape* fig);
+void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Shape* fig, vec4 colorRGBA);
 bool checkCollision(Shape obj1, Shape obj2);
 void crea_punti_forma_da_file();
 void reshape(int w, int h);

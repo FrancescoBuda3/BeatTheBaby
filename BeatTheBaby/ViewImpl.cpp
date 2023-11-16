@@ -13,7 +13,9 @@ float w_update, h_update;
 
 int width = 1280;
 int height = 720;
-Shape circle;
+Shape circleW;
+Shape circleR;
+Shape circleG;
 vector<float> booms = {};
 
 void ViewImpl::showMenu() {
@@ -36,9 +38,8 @@ void ViewImpl::notifyBoom(float pos) {
 	booms.push_back(pos/3);
 }
 
-void ViewImpl::notifyClap(Score score) {
-
-
+void ViewImpl::notifyClap(Score score, float pos) {
+		booms.push_back(pos / 3);
 }
 
 void ViewImpl::notifyYes() {
@@ -81,12 +82,28 @@ void ViewImpl::init() {
 	glutSetOption(GLUT_MULTISAMPLE, 16);
 	glEnable(GL_MULTISAMPLE);
 	
-	circle.nTriangles = 180;
-	circle.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circle);
-	crea_VAO_Vector(&circle);
-	circle.render = GL_TRIANGLE_FAN;
-	circle.alive = TRUE;
+	circleW.nTriangles = 180;
+	circleW.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleW, vec4(1,1,1,1));
+	crea_VAO_Vector(&circleW);
+	circleW.render = GL_TRIANGLE_FAN;
+	circleW.alive = TRUE;
+
+	circleR.nTriangles = 180;
+	circleR.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleR, vec4(1, 0, 0, 0.5));
+	crea_VAO_Vector(&circleW);
+	circleR.render = GL_TRIANGLE_FAN;
+	circleR.alive = TRUE;
+
+	circleG.nTriangles = 180;
+	circleG.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0, 1, 0, 0.5));
+	crea_VAO_Vector(&circleW);
+	circleG.render = GL_TRIANGLE_FAN;
+	circleG.alive = TRUE;
+
+
 
 	Projection = ortho(0.0f, float(width), 0.0f, float(height));
 	glViewport(0, 0, width, height);
@@ -119,12 +136,12 @@ void ViewImpl::drawScene() {
 
 void ViewImpl::drawBooms() {
 	for (float boom : booms) {
-		mat4 mat = translate(circle.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), height/2, 0.0));
+		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), 3*height/4, 0.0));
 		mat = scale(mat, vec3(20.5, 20.5, 1.0));
 		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
-		glUniform1i(locSceltafs, circle.sceltaFs);
-		glBindVertexArray(circle.VAO);
-		glDrawArrays(circle.render, 0, circle.nv);
+		glUniform1i(locSceltafs, circleW.sceltaFs);
+		glBindVertexArray(circleW.VAO);
+		glDrawArrays(circleW.render, 0, circleW.nv);
 		glBindVertexArray(0);
 	}
 }

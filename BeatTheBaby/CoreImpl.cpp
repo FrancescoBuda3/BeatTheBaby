@@ -125,7 +125,7 @@ void CoreImpl::update() {
 		else if (buzz_c->checkClick()) {
 			jukebox_c->playClap();
 			Score score = world_c->clap(metronome_c->getPos());
-			view_c->notifyClap(score);
+			view_c->notifyClap(score, metronome_c->getPos() + tickCount_c -1);
 			if (score == MISS) {
 				missed_c = true;
 			}	
@@ -134,6 +134,7 @@ void CoreImpl::update() {
 
 	case(FEEDBACK):
 		if (tickCount_c == FEEDBACK_TIME) {
+			std::cout << "\n" << std::endl;
 			tickCount_c = 0;
 			timeline_c = new std::list<float>(world_c->getTimeline());
 			view_c->notifyScore(world_c->getScore());

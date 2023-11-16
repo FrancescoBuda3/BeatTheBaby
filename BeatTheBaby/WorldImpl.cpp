@@ -12,6 +12,10 @@ Score WorldImpl::clap(float pos) {
 	}
 	else {
 		Score ret = this->timeLine.front()->checkClap(pos);
+		if (ret == Score::NONE) {
+			this->timeLine.pop_front();
+			return this->clap(pos);
+		}
 		if (ret == Score::MISS) {
 			this->lives == 0? this->lives = 0 : this->lives--;
 			std::cout << "Missed! Lives: " << this->lives << std::endl;
@@ -48,6 +52,7 @@ int WorldImpl::getLives() {
 };
 
 void WorldImpl::generateNextTimeline() {
+	this->timeLine.clear();
 	for (int i = 0; i < TIMELINE_SIZE; i++) {
 		this->timeLine.push_back(BeatImpl::generateRandom());
 	}

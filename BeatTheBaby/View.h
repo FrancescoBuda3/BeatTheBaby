@@ -14,7 +14,7 @@ public:
 	virtual void showGameOver() = 0;
 	virtual void notifyTick() = 0;
 	virtual void notifyBoom(float pos) = 0;
-	virtual void notifyClap(Score score) = 0;
+	//virtual void notifyClap(Score score) = 0;
 	virtual void notifyYes() = 0;
 	virtual void notifyNo() = 0;
 	virtual void notifyScore(long score) = 0;
@@ -36,7 +36,7 @@ public:
 	void showGameOver();
 	void notifyTick();
 	void notifyBoom(float pos);
-	void notifyClap(Score score);
+	void notifyClap(Score score, float pos);
 	void notifyYes();
 	void notifyNo();
 	void notifyScore(long score);

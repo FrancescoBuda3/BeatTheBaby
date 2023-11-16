@@ -234,7 +234,7 @@ double  degtorad(double angle) { //geom
 	return angle * PI / 180;
 }
 
-void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Shape* fig) { //geom
+void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Shape* fig, vec4 colorRGBA) { //geom
 
 	int i;
 	float stepA = (2 * PI) / fig->nTriangles;
@@ -247,14 +247,14 @@ void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Sha
 
 	fig->vertici.push_back(vec3(cx, cy, 0.0));
 
-	fig->colors.push_back(vec4(255.0 / 255.0, 75.0 / 255.0, 0.0, 1.0));
+	fig->colors.push_back(colorRGBA);
 
 	for (i = 0; i <= fig->nTriangles; i++)
 	{
 		t = (float)i * stepA;
 		fig->vertici.push_back(vec3(cx + raggiox * cos(t), cy + raggioy * sin(t), 0.0));
 		//Colore 
-		fig->colors.push_back(vec4(1.0, 204.0 / 255.0, 0.0, 1.0));
+		fig->colors.push_back(colorRGBA);
 	}
 
 	fig->nv = fig->vertici.size();
