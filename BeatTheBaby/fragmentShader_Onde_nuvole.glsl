@@ -14,12 +14,12 @@ float myrandom(vec2 co) {
 
 void main()
 {
-if (scelta_fs==1)
+
     FragColor=ourColor;
-else
+
+
  
-   FragColor=vec4(sin(gl_FragCoord.x*0.05),cos(gl_FragCoord.y*0.05), sin(gl_FragCoord.x*0.05)*cos(gl_FragCoord.y*0.05),1 );
-    
+
  
 }
  

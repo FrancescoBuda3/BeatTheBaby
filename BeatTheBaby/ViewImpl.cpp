@@ -6,7 +6,7 @@ static unsigned int programId;
 GLuint MatProj, MatModel, loctime, locres, locCol1, locCol2, locCol3, locSceltafs;
 Shape  Farf, Cuore, piano, Proiettile;
 Shape Curva, Poligonale, Derivata, shape;
-int pval;
+int pval = 600;
 float* t;
 mat4 Projection;
 float w_update, h_update;
@@ -16,7 +16,12 @@ int height = 720;
 Shape circleW;
 Shape circleR;
 Shape circleG;
+Shape heart;
+Shape arm;
+Shape background;
 vector<float> booms = {};
+vector<float> claps = {};
+vector<Score> scores = {};
 
 void ViewImpl::showMenu() {
 	// TODO: Implement
@@ -39,7 +44,9 @@ void ViewImpl::notifyBoom(float pos) {
 }
 
 void ViewImpl::notifyClap(Score score, float pos) {
-		booms.push_back(pos / 3);
+	claps.push_back(booms.front());
+	booms.erase(booms.begin());
+	scores.push_back(score);
 }
 
 void ViewImpl::notifyYes() {
@@ -52,6 +59,8 @@ void ViewImpl::notifyNo() {
 
 void ViewImpl::notifyScore(long score) {
 	booms.clear();
+	claps.clear();
+	scores.clear();
 }
 
 void ViewImpl::notifyLives(int lives) {
@@ -68,6 +77,11 @@ void ViewImpl::init() {
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Modellazione Scena 2D");
+	
+
+	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	glutDisplayFunc(drawScene);
 
 	glewExperimental = GL_TRUE;
@@ -87,22 +101,42 @@ void ViewImpl::init() {
 	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleW, vec4(1,1,1,1));
 	crea_VAO_Vector(&circleW);
 	circleW.render = GL_TRIANGLE_FAN;
-	circleW.alive = TRUE;
+
 
 	circleR.nTriangles = 180;
 	circleR.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleR, vec4(1, 0, 0, 0.5));
-	crea_VAO_Vector(&circleW);
+	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleR, vec4(1, 0, 0, 1));
+	crea_VAO_Vector(&circleR);
 	circleR.render = GL_TRIANGLE_FAN;
-	circleR.alive = TRUE;
+
 
 	circleG.nTriangles = 180;
 	circleG.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0, 1, 0, 0.5));
-	crea_VAO_Vector(&circleW);
+	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0, 1, 0, 1));
+	crea_VAO_Vector(&circleG);
 	circleG.render = GL_TRIANGLE_FAN;
-	circleG.alive = TRUE;
 
+
+	heart.nTriangles = 180;
+	heart.Model = mat4(1.0);
+	costruisci_cuore(0.0, 0.0, 1.0, 1.0, &heart);
+	crea_VAO_Vector(&heart);
+	heart.render = GL_TRIANGLE_FAN;
+
+	arm.nTriangles = 300;
+	arm.Model = mat4(1.0);
+	crea_punti_forma_da_file();
+	costruisci_formaHermite(vec4(0.0, 175.0/255.0, 84.0/255.0, 1.0), vec4(0.0, 175.0/255.0, 84.0/255.0, 1.0), &arm);
+	crea_VAO_Vector(&arm);
+	arm.sceltaFs= 1;
+	arm.render = GL_TRIANGLE_FAN;
+
+	background.nTriangles = 10;
+	background.Model = mat4(1.0);
+	costruisci_piano(&background);
+	crea_VAO_Vector(&background);
+	background.sceltaFs = 0;
+	background.render = GL_TRIANGLE_STRIP;
 
 
 	Projection = ortho(0.0f, float(width), 0.0f, float(height));
@@ -128,8 +162,27 @@ void ViewImpl::drawScene() {
 
 	glUniformMatrix4fv(MatProj, 1, GL_FALSE, value_ptr(Projection));
 
+	mat4 mat = translate(background.Model, vec3(1.0, 1.0, 0.0));
+	mat = scale(mat, vec3(width, height, 1.0));
+	glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
+	glUniform1i(locSceltafs, background.sceltaFs);
+	glBindVertexArray(background.VAO);
+	glDrawArrays(background.render, 0, background.nv);
+	glBindVertexArray(0);
 
 	drawBooms();
+	drawClaps();
+
+	//provv
+	mat = translate(arm.Model, vec3(450.0, 300.0, 0.0));
+	mat = scale(mat, vec3(1, 1, 1.0));
+
+	glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
+	glUniform1i(locSceltafs, arm.sceltaFs);
+	glBindVertexArray(arm.VAO);
+	glDrawArrays(arm.render, 0, arm.nv);
+	glBindVertexArray(0);
+	
 	glUseProgram(programId);
 	glutSwapBuffers();
 }
@@ -143,6 +196,35 @@ void ViewImpl::drawBooms() {
 		glBindVertexArray(circleW.VAO);
 		glDrawArrays(circleW.render, 0, circleW.nv);
 		glBindVertexArray(0);
+	}
+}
+
+void ViewImpl::drawClaps() {
+	int i = 0;
+	for(float clap : claps) {
+		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * clap) + width * (1.0 / 8), 3 * height / 4, 0.0));
+		mat = scale(mat, vec3(20.5, 20.5, 1.0));
+		Shape fig;
+		switch (scores[i]) {
+			case Score::GOOD:
+				fig = circleG;
+				break;
+
+			case Score::PERFECT:
+				fig = heart;
+				mat = scale(mat, vec3(0.08, 0.08, 1.0));
+				break;
+
+			case Score::MISS:
+				fig = circleR;
+				break;
+		}
+		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
+		glUniform1i(locSceltafs, fig.sceltaFs);
+		glBindVertexArray(fig.VAO);
+		glDrawArrays(fig.render, 0, fig.nv);
+		glBindVertexArray(0);
+		i++;
 	}
 }
 

@@ -5,23 +5,8 @@
 #include "GestioneGeometria.h"
 #include "Lib.h"
 
-class View {
-public:
-	virtual void init() = 0;
-	//virtual void drawScene() = 0;
-	virtual void showMenu() = 0;
-	virtual void showGame() = 0;
-	virtual void showGameOver() = 0;
-	virtual void notifyTick() = 0;
-	virtual void notifyBoom(float pos) = 0;
-	//virtual void notifyClap(Score score) = 0;
-	virtual void notifyYes() = 0;
-	virtual void notifyNo() = 0;
-	virtual void notifyScore(long score) = 0;
-	virtual void notifyLives(int lives) = 0;
-};
 
-class ViewImpl : public View {
+class ViewImpl {
 private:
 	
 
@@ -29,6 +14,7 @@ private:
 
 public:
 	static void drawBooms();
+	static void drawClaps();
 	void init();
 	static void drawScene();
 	void showMenu();

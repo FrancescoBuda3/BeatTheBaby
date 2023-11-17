@@ -17,10 +17,10 @@ void costruisci_piano(Shape* fig) //geom
 	fig->vertici.push_back(vec3(-1.0, 1.0, 0.0));
 	fig->vertici.push_back(vec3(1.0, 1.0, 0.0));
 	for (i = 0; i < fig->vertici.size(); i++)
-		fig->colors.push_back(vec4(0.13, 0.44, 0.70, 1.0));
+		fig->colors.push_back(vec4(0.0, 56.0/255.0, 26.0/255.0, 1.0));
 	fig->nv = fig->vertici.size();
-	fig->sceltaFs = 0;
-	fig->render = GL_TRIANGLE_STRIP;
+	fig->sceltaFs = 1;
+	fig->render = GL_TRIANGLE_FAN;
 }
 
 void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* fig) { //geom
@@ -194,6 +194,7 @@ void InterpolazioneHermite(float* t, Shape* Fig, vec4 color_top, vec4 color_bot)
 
 	for (tg = 0; tg <= 1; tg += passotg)
 	{
+		
 		if (tg > t[is + 1]) is++;
 
 		ampiezza = (t[is + 1] - t[is]);
@@ -201,6 +202,7 @@ void InterpolazioneHermite(float* t, Shape* Fig, vec4 color_top, vec4 color_bot)
 
 		x = Fig->CP[is].x * PHI0(tgmapp) + DX(is, t) * PHI1(tgmapp) * ampiezza + Fig->CP[is + 1].x * PSI0(tgmapp) + DX(is + 1, t) * PSI1(tgmapp) * ampiezza;
 		y = Fig->CP[is].y * PHI0(tgmapp) + DY(is, t) * PHI1(tgmapp) * ampiezza + Fig->CP[is + 1].y * PSI0(tgmapp) + DY(is + 1, t) * PSI1(tgmapp) * ampiezza;
+
 
 		Fig->vertici.push_back(vec3(x, y, 0.0));
 		Fig->colors.push_back(color_top);
@@ -220,14 +222,15 @@ void costruisci_formaHermite(vec4 color_top, vec4 color_bot, Shape* forma)
 		int i;
 		float step = 1.0 / (float)(Curva.CP.size() - 1);
 
-		for (i = 0; i < Curva.CP.size(); i++)
-			t[i] = (float)i * step;
+		for (i = 0; i < Curva.CP.size(); i++) t[i] = (float)i * step;
 
 
 		InterpolazioneHermite(t, &Curva, color_top, color_bot);
 
 		forma->nv = Curva.vertici.size();
 	}
+	forma->vertici = Curva.vertici;
+	forma->colors = Curva.colors;
 
 }
 double  degtorad(double angle) { //geom
@@ -331,7 +334,7 @@ void crea_punti_forma_da_file() // geom
 		float z;
 	};
 
-	FILE* file = fopen("sommergibile.txt", "r");
+	FILE* file = fopen("./Forme/sommergibile.txt", "r");
 	if (file == NULL) {
 		perror("Impossibile aprire il file");
 	}

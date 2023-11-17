@@ -23,7 +23,7 @@ int tickCount_c;
 bool missed_c;
 
 CoreImpl::CoreImpl(){
-	metronome_c = new MetronomeImpl(85);
+	metronome_c = new MetronomeImpl(80);
 	buzz_c = new BuzzImpl();
 	jukebox_c = new JukeboxImpl("./Audio/tick.wav", "./Audio/boom.wav", "./Audio/clap.wav", "./Audio/yes.wav", "./Audio/no.wav", "./Audio/gameover.wav");
 	world_c = new WorldImpl();
