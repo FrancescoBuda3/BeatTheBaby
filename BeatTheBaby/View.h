@@ -28,6 +28,7 @@ public:
 	void notifyScore(long score);
 	void notifyLives(int lives);
 	void INIT_SHADER();
+	static void drawShape(Shape* fig, mat4 model);
 };
 
 #endif 

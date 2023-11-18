@@ -164,24 +164,23 @@ void ViewImpl::drawScene() {
 
 	mat4 mat = translate(background.Model, vec3(1.0, 1.0, 0.0));
 	mat = scale(mat, vec3(width, height, 1.0));
-	glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
-	glUniform1i(locSceltafs, background.sceltaFs);
-	glBindVertexArray(background.VAO);
-	glDrawArrays(background.render, 0, background.nv);
-	glBindVertexArray(0);
+	drawShape(&background, mat);
 
 	drawBooms();
 	drawClaps();
 
-	//provv
-	mat = translate(arm.Model, vec3(450.0, 300.0, 0.0));
+
+	mat = translate(arm.Model, vec3(width/2, 300.0, 0.0));
 	mat = scale(mat, vec3(1, 1, 1.0));
 
-	glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
-	glUniform1i(locSceltafs, arm.sceltaFs);
-	glBindVertexArray(arm.VAO);
-	glDrawArrays(arm.render, 0, arm.nv);
-	glBindVertexArray(0);
+	drawShape(&arm, mat);
+
+	mat = translate(mat, vec3(-300.0, 0.0, 0.0));
+	mat = scale(mat, vec3(-1, 1, 1.0));
+
+	drawShape(&arm, mat);
+
+
 	
 	glUseProgram(programId);
 	glutSwapBuffers();
@@ -191,11 +190,7 @@ void ViewImpl::drawBooms() {
 	for (float boom : booms) {
 		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), 3*height/4, 0.0));
 		mat = scale(mat, vec3(20.5, 20.5, 1.0));
-		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
-		glUniform1i(locSceltafs, circleW.sceltaFs);
-		glBindVertexArray(circleW.VAO);
-		glDrawArrays(circleW.render, 0, circleW.nv);
-		glBindVertexArray(0);
+		drawShape(&circleW, mat);
 	}
 }
 
@@ -219,11 +214,7 @@ void ViewImpl::drawClaps() {
 				fig = circleR;
 				break;
 		}
-		glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(mat));
-		glUniform1i(locSceltafs, fig.sceltaFs);
-		glBindVertexArray(fig.VAO);
-		glDrawArrays(fig.render, 0, fig.nv);
-		glBindVertexArray(0);
+		drawShape(&fig, mat);
 		i++;
 	}
 }
@@ -268,5 +259,14 @@ void ViewImpl::INIT_SHADER(void)
 
 	programId_text = ShaderMaker::createProgram(vertexShader, fragmentShader); */
 
+}
+
+void ViewImpl::drawShape(Shape *fig, mat4 Model)
+{
+	glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Model));
+	glUniform1i(locSceltafs,fig->sceltaFs);
+	glBindVertexArray(fig->VAO);
+	glDrawArrays(fig->render, 0, fig->nv);
+	glBindVertexArray(0);
 }
 

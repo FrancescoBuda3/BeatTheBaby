@@ -32,7 +32,7 @@ void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* f
 
 	fig->vertici.push_back(vec3(cx, cy, 0.0));
 
-	fig->colors.push_back(vec4(255.0 / 255.0, 75.0 / 255.0, 0.0, 1.0));
+	fig->colors.push_back(vec4(1.0, 204.0 / 255.0, 0.0, 1.0));
 
 	for (i = 0; i <= fig->nTriangles; i++)
 	{
