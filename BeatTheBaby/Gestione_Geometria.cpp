@@ -1,4 +1,5 @@
 #include "GestioneGeometria.h"
+#include "stdio.h"
 
 extern Shape  Farf, Cuore, piano, Proiettile;
 extern Shape Curva, Poligonale, Derivata, shape;
@@ -7,7 +8,14 @@ extern float* t;
 
 #pragma warning(disable:4996)
 
+void costruisci_poligono(Shape* fig, vec4 colorRGBA, vector<vec3> vertex) {
+	for (int i = 0; i < vertex.size(); i++) {
 
+		fig->vertici.push_back(vertex[i]);
+		fig->colors.push_back(colorRGBA);
+	}
+	fig->nv = fig->vertici.size();
+}
 
 void costruisci_piano(Shape* fig) //geom
 {
@@ -179,7 +187,7 @@ float DY(int i, float* t)
 void InterpolazioneHermite(float* t, Shape* Fig, vec4 color_top, vec4 color_bot)
 {
 	float p_t = 0, p_b = 0, p_c = 0, x, y;
-	float passotg = 1.0 / (float)(pval - 1);
+	float passotg = 1.0 / (float)(Fig->nTriangles - 1);
 
 	float tg = 0, tgmapp, ampiezza;
 	int i = 0;
@@ -215,6 +223,7 @@ void costruisci_formaHermite(vec4 color_top, vec4 color_bot, Shape* forma)
 
 	Poligonale.CP = Curva.CP;
 	Poligonale.colCP = Curva.colCP;
+	Curva.nTriangles = forma->nTriangles;
 
 	if (Poligonale.CP.size() > 1)
 	{
@@ -325,8 +334,10 @@ bool checkCollision(Shape obj1, Shape obj2) { //geom
 
 	return collisionX && collisionY;
 }
-void crea_punti_forma_da_file() // geom
+void crea_punti_forma_da_file(const char *filePath) // geom
 {
+	Curva.CP.clear();
+	Derivata.CP.clear();
 	int i;
 	struct Dati {
 		float x;
@@ -334,7 +345,7 @@ void crea_punti_forma_da_file() // geom
 		float z;
 	};
 
-	FILE* file = fopen("./Forme/sommergibile.txt", "r");
+	FILE* file = fopen(filePath, "r");
 	if (file == NULL) {
 		perror("Impossibile aprire il file");
 	}

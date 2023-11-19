@@ -42,7 +42,7 @@ typedef struct {
 }Shape;
 
 
-
+void costruisci_poligono(Shape* fig, vec4 colorRGBA, vector<vec3> vertex);
 void costruisci_piano(Shape* fig);
 void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* fig);
 void costruisci_farfalla(float cx, float cy, float raggiox, float raggioy, Shape* fig);
@@ -55,7 +55,7 @@ void costruisci_formaHermite(vec4 color_top, vec4 color_bot, Shape* forma);
 double  degtorad(double angle);
 void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Shape* fig, vec4 colorRGBA);
 bool checkCollision(Shape obj1, Shape obj2);
-void crea_punti_forma_da_file();
+void crea_punti_forma_da_file(const char *filePath);
 void reshape(int w, int h);
 
 

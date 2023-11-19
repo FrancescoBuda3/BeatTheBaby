@@ -19,6 +19,8 @@ Shape circleG;
 Shape heart;
 Shape arm;
 Shape background;
+vector<Shape> body = {};
+vector<Shape> head = {};
 vector<float> booms = {};
 vector<float> claps = {};
 vector<Score> scores = {};
@@ -89,9 +91,12 @@ void ViewImpl::init() {
 
 	INIT_SHADER();
 
-	
+	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	
+
 
 	glutSetOption(GLUT_MULTISAMPLE, 16);
 	glEnable(GL_MULTISAMPLE);
@@ -123,20 +128,104 @@ void ViewImpl::init() {
 	crea_VAO_Vector(&heart);
 	heart.render = GL_TRIANGLE_FAN;
 
-	arm.nTriangles = 300;
+	arm.nTriangles = 600;
 	arm.Model = mat4(1.0);
-	crea_punti_forma_da_file();
+	crea_punti_forma_da_file("./Forme/arm.txt");
 	costruisci_formaHermite(vec4(0.0, 175.0/255.0, 84.0/255.0, 1.0), vec4(0.0, 175.0/255.0, 84.0/255.0, 1.0), &arm);
 	crea_VAO_Vector(&arm);
 	arm.sceltaFs= 1;
 	arm.render = GL_TRIANGLE_FAN;
 
-	background.nTriangles = 10;
+	background.nTriangles = 2;
 	background.Model = mat4(1.0);
 	costruisci_piano(&background);
 	crea_VAO_Vector(&background);
 	background.sceltaFs = 0;
 	background.render = GL_TRIANGLE_STRIP;
+
+	Shape polygon;
+	polygon.nTriangles = 10;
+	polygon.Model = mat4(1.0);
+	costruisci_poligono(&polygon, vec4(235.0/255.0, 231.0/255.0, 163.0/255.0, 1.0),
+								{ vec3(-57.856, -85.435, 0.0), vec3(-96.115, -47.176, 0.0),
+								  vec3(-96.115, 47.176, 0.0), vec3(-57.856, 85.435, 0.0),
+								  vec3(57.856, 85.435, 0.0), vec3(96.115, 47.176, 0.0),
+								  vec3(96.115, -47.176, 0.0), vec3(57.856, -85.435, 0.0)});
+	crea_VAO_Vector(&polygon);
+	polygon.sceltaFs = 1;
+	polygon.render = GL_TRIANGLE_FAN;
+	body.push_back(polygon);
+
+	Shape circle;
+	circle.nTriangles = 180;
+	circle.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 33.5, 33.5, &circle, vec4(235.0 / 255.0, 231.0 / 255.0, 163.0 / 255.0, 1.0));
+	crea_VAO_Vector(&circle);
+	circle.sceltaFs = 1;
+	circle.render = GL_TRIANGLE_FAN;
+	body.push_back(circle);
+
+	Shape head1;
+	head1.nTriangles = 180;
+	head1.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 0.06*width, 0.06*width, &head1, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	crea_VAO_Vector(&head1);
+	head1.sceltaFs = 1;
+	head1.render = GL_TRIANGLE_FAN;
+	head.push_back(head1);
+
+	Shape head2;
+	head2.nTriangles = 180;
+	head2.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 0.075 * width, 0.075 * width, &head2, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	crea_VAO_Vector(&head2);
+	head2.sceltaFs = 1;
+	head2.render = GL_TRIANGLE_FAN;
+	head.push_back(head2);
+
+	Shape head3;
+	head3.nTriangles = 180;
+	head3.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 0.025 * width, 0.025 * width, &head3, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	crea_VAO_Vector(&head3);
+	head3.sceltaFs = 1;
+	head3.render = GL_TRIANGLE_FAN;
+	head.push_back(head3);
+
+	Shape head4;
+	head4.nTriangles = 180;
+	head4.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 0.022 * width, 0.022 * width, &head4, vec4(1.0, 1.0, 1.0, 1.0));
+	crea_VAO_Vector(&head4);
+	head4.sceltaFs = 1;
+	head4.render = GL_TRIANGLE_FAN;
+	head.push_back(head4);
+
+	Shape head5;
+	head5.nTriangles = 180;
+	head5.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 0.011 * width, 0.011 * width, &head5, vec4(61.0/255.0, 61.0/255.0, 61.0/255.0, 1.0));
+	crea_VAO_Vector(&head5);
+	head5.sceltaFs = 1;
+	head5.render = GL_TRIANGLE_FAN;
+	head.push_back(head5);
+
+	Shape head6;
+	head6.nTriangles = 100;
+	head6.Model = mat4(1.0);
+	crea_punti_forma_da_file("./Forme/mouth.txt");
+	costruisci_formaHermite(vec4(61.0 / 255.0, 61.0 / 255.0, 61.0 / 255.0, 1.0), vec4(61.0 / 255.0, 61.0 / 255.0, 61.0 / 255.0, 1.0), &head6);
+	crea_VAO_Vector(&head6);
+	head6.sceltaFs = 1;
+	
+	glLineWidth(5.0);
+	head6.render = GL_LINE;
+    
+	head.push_back(head6);
+
+
+
+
 
 
 	Projection = ortho(0.0f, float(width), 0.0f, float(height));
@@ -169,16 +258,82 @@ void ViewImpl::drawScene() {
 	drawBooms();
 	drawClaps();
 
+	
+	mat = translate(body[0].Model, vec3(width / 2, height / 4, 0.0));
+	mat = scale(mat, vec3(1.0, 1.0, 1.0));
 
-	mat = translate(arm.Model, vec3(width/2, 300.0, 0.0));
+	drawShape(&body[0], mat);
+
+	mat = translate(body[1].Model, vec3(width/2 - 0.0487*width, height / 4 + 0.0406*width, 0.0));
+	mat = scale(mat, vec3(1.0, 1.0, 1.0));
+
+	drawShape(&body[1], mat);
+
+
+	mat = translate(body[1].Model, vec3(width / 2 - 0.0487 * width, height / 4 - 0.0406 * width, 0.0));
+	mat = scale(mat, vec3(1.0, 1.0, 1.0));
+
+	drawShape(&body[1], mat);
+
+
+	mat = translate(body[1].Model, vec3(width / 2 + 0.0487 * width, height / 4 - 0.0406 * width, 0.0));
+	mat = scale(mat, vec3(1.0, 1.0, 1.0));
+
+	drawShape(&body[1], mat);
+
+	mat = translate(body[1].Model, vec3(width / 2 + 0.0487 * width, height / 4 + 0.0406 * width, 0.0));
+	mat = scale(mat, vec3(1.0, 1.0, 1.0));
+
+	drawShape(&body[1], mat);
+	
+	
+	mat = translate(arm.Model, vec3(0.110*width + width/2, height/4 + width*0.06, 0.0));
 	mat = scale(mat, vec3(1, 1, 1.0));
 
 	drawShape(&arm, mat);
 
-	mat = translate(mat, vec3(-300.0, 0.0, 0.0));
+	mat = translate(mat, vec3(-0.220*width, 0.0, 0.0));
 	mat = scale(mat, vec3(-1, 1, 1.0));
 
 	drawShape(&arm, mat);
+
+	mat = translate(head[0].Model, vec3(width / 2, height / 4 + 0.115*width, 0.0));
+
+	drawShape(&head[0], mat);
+
+	mat = translate(head[1].Model, vec3(width / 2, height / 4 + 0.164 * width, 0.0));
+
+	drawShape(&head[1], mat);
+
+	mat = translate(head[2].Model, vec3(width / 2 + 0.0766*width, height / 4 + 0.113 * width, 0.0));
+
+	drawShape(&head[2], mat);
+
+	mat = translate(head[2].Model, vec3(width / 2 - 0.0766 * width, height / 4 + 0.113 * width, 0.0));
+
+	drawShape(&head[2], mat);
+
+	mat = translate(head[3].Model, vec3(width / 2 + 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+
+	drawShape(&head[3], mat);
+
+	mat = translate(head[3].Model, vec3(width / 2 - 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+
+	drawShape(&head[3], mat);
+
+	mat = translate(head[4].Model, vec3(width / 2 + 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+
+	drawShape(&head[4], mat);
+
+	mat = translate(head[4].Model, vec3(width / 2 - 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+
+	drawShape(&head[4], mat);
+
+	mat = translate(head[5].Model, vec3(width / 2, height / 4 + 0.101 * width, 0.0));
+
+	drawShape(&head[5], mat);
+
+
 
 
 	
