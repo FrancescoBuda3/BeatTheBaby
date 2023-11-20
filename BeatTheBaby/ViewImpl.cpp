@@ -13,6 +13,8 @@ float w_update, h_update;
 
 int width = 1280;
 int height = 720;
+vec3 babyScale = vec3(0.7, 0.7, 1.0);
+vec3 babyPos = vec3(width/2, height/4, 0.0);
 Shape circleW;
 Shape circleR;
 Shape circleG;
@@ -165,6 +167,16 @@ void ViewImpl::init() {
 	circle.render = GL_TRIANGLE_FAN;
 	body.push_back(circle);
 
+	Shape body1;
+	body1.nTriangles = 180;
+	body1.Model = mat4(1.0);
+	crea_punti_forma_da_file("./Forme/leg.txt");
+	costruisci_formaHermite(vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0), vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0), &body1);
+	crea_VAO_Vector(&body1);
+	body1.sceltaFs = 1;
+	body1.render = GL_TRIANGLE_FAN;
+	body.push_back(body1);
+
 	Shape head1;
 	head1.nTriangles = 180;
 	head1.Model = mat4(1.0);
@@ -211,17 +223,34 @@ void ViewImpl::init() {
 	head.push_back(head5);
 
 	Shape head6;
-	head6.nTriangles = 100;
+	head6.nTriangles = 1;
 	head6.Model = mat4(1.0);
-	crea_punti_forma_da_file("./Forme/mouth.txt");
-	costruisci_formaHermite(vec4(61.0 / 255.0, 61.0 / 255.0, 61.0 / 255.0, 1.0), vec4(61.0 / 255.0, 61.0 / 255.0, 61.0 / 255.0, 1.0), &head6);
+	costruisci_poligono(&head6, vec4(61.0 / 255.0, 61.0 / 255.0, 61.0 / 255.0, 1.0), { vec3(-0.04 * width, 0.0, 0.0), vec3(0.04 * width, 0.0, 0.0)});
 	crea_VAO_Vector(&head6);
 	head6.sceltaFs = 1;
-	
-	glLineWidth(5.0);
+	glLineWidth(10.0);
 	head6.render = GL_LINE;
-    
 	head.push_back(head6);
+
+	Shape head7;
+	head7.nTriangles = 180;
+	head7.Model = mat4(1.0);
+	crea_punti_forma_da_file("./Forme/horn.txt");
+	costruisci_formaHermite(vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0), vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0), &head7);
+	crea_VAO_Vector(&head7);
+	head7.sceltaFs = 1;
+	head7.render = GL_TRIANGLE_FAN;
+	head.push_back(head7);
+
+	Shape head8;
+	head8.nTriangles = 600;
+	head8.Model = mat4(1.0);
+	crea_punti_forma_da_file("./Forme/eyebrow.txt");
+	costruisci_formaHermite(vec4(9.0/225.0, 64.0 / 255.0, 116.0 / 255.0, 1.0), vec4(9.0 / 225.0, 64.0 / 255.0, 116.0 / 255.0, 1.0), &head8);
+	crea_VAO_Vector(&head8);
+	head8.sceltaFs = 1;
+	head8.render = GL_TRIANGLE_FAN;
+	head.push_back(head8);
 
 
 
@@ -258,80 +287,145 @@ void ViewImpl::drawScene() {
 	drawBooms();
 	drawClaps();
 
+	mat = translate(body[0].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0, 0.0, 0.0));
 	
-	mat = translate(body[0].Model, vec3(width / 2, height / 4, 0.0));
-	mat = scale(mat, vec3(1.0, 1.0, 1.0));
 
 	drawShape(&body[0], mat);
 
-	mat = translate(body[1].Model, vec3(width/2 - 0.0487*width, height / 4 + 0.0406*width, 0.0));
-	mat = scale(mat, vec3(1.0, 1.0, 1.0));
-
-	drawShape(&body[1], mat);
-
-
-	mat = translate(body[1].Model, vec3(width / 2 - 0.0487 * width, height / 4 - 0.0406 * width, 0.0));
-	mat = scale(mat, vec3(1.0, 1.0, 1.0));
-
-	drawShape(&body[1], mat);
-
-
-	mat = translate(body[1].Model, vec3(width / 2 + 0.0487 * width, height / 4 - 0.0406 * width, 0.0));
-	mat = scale(mat, vec3(1.0, 1.0, 1.0));
-
-	drawShape(&body[1], mat);
-
-	mat = translate(body[1].Model, vec3(width / 2 + 0.0487 * width, height / 4 + 0.0406 * width, 0.0));
-	mat = scale(mat, vec3(1.0, 1.0, 1.0));
-
-	drawShape(&body[1], mat);
+	mat = translate(body[1].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(- 0.0487*width, 0.0406*width, 0.0));
 	
+
+	drawShape(&body[1], mat);
+
+	mat = translate(body[1].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(- 0.0487*width, - 0.0406 * width, 0.0));
 	
-	mat = translate(arm.Model, vec3(0.110*width + width/2, height/4 + width*0.06, 0.0));
-	mat = scale(mat, vec3(1, 1, 1.0));
+
+	drawShape(&body[1], mat);
+
+	mat = translate(body[1].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0487 * width, -0.0406 * width, 0.0));
+	
+
+	drawShape(&body[1], mat);
+
+	mat = translate(body[1].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0487 * width, 0.0406 * width, 0.0));
+	
+	drawShape(&body[1], mat);
+
+	mat = translate(body[2].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.093 * width, -0.068 * width, 0.0));
+	
+
+	drawShape(&body[2], mat);
+
+	mat = translate(body[2].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(-0.093*width, -0.068*width, 0.0));
+	mat = scale(mat, vec3(-1.0, 1.0, 1.0));
+
+	drawShape(&body[2], mat);
+	
+	mat = translate(arm.Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.110*width, width*0.06, 0.0));
+	
+	drawShape(&arm, mat);
+
+	mat = translate(arm.Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(-0.110 * width, width * 0.06, 0.0));
+	mat = scale(mat, vec3(-1.0, 1.0, 1.0));
 
 	drawShape(&arm, mat);
 
-	mat = translate(mat, vec3(-0.220*width, 0.0, 0.0));
-	mat = scale(mat, vec3(-1, 1, 1.0));
-
-	drawShape(&arm, mat);
-
-	mat = translate(head[0].Model, vec3(width / 2, height / 4 + 0.115*width, 0.0));
+	mat = translate(head[0].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0, 0.115*width, 0.0));
 
 	drawShape(&head[0], mat);
 
-	mat = translate(head[1].Model, vec3(width / 2, height / 4 + 0.164 * width, 0.0));
+	mat = translate(head[1].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0, 0.164 * width, 0.0));
 
 	drawShape(&head[1], mat);
 
-	mat = translate(head[2].Model, vec3(width / 2 + 0.0766*width, height / 4 + 0.113 * width, 0.0));
+	mat = translate(head[2].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0766*width, 0.113 * width, 0.0));
 
 	drawShape(&head[2], mat);
 
-	mat = translate(head[2].Model, vec3(width / 2 - 0.0766 * width, height / 4 + 0.113 * width, 0.0));
+	mat = translate(head[2].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(- 0.0766 * width, 0.113 * width, 0.0));
 
 	drawShape(&head[2], mat);
 
-	mat = translate(head[3].Model, vec3(width / 2 + 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+	mat = translate(head[3].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0291 * width, 0.155 * width, 0.0));
 
 	drawShape(&head[3], mat);
 
-	mat = translate(head[3].Model, vec3(width / 2 - 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+	mat = translate(head[3].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(- 0.0291 * width, 0.155 * width, 0.0));
 
 	drawShape(&head[3], mat);
 
-	mat = translate(head[4].Model, vec3(width / 2 + 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+	mat = translate(head[4].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0291 * width, 0.155 * width, 0.0));
 
 	drawShape(&head[4], mat);
 
-	mat = translate(head[4].Model, vec3(width / 2 - 0.0291 * width, height / 4 + 0.155 * width, 0.0));
+	mat = translate(head[4].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(-0.0291 * width, 0.155 * width, 0.0));
 
 	drawShape(&head[4], mat);
 
-	mat = translate(head[5].Model, vec3(width / 2, height / 4 + 0.101 * width, 0.0));
+	mat = translate(head[5].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0, 0.101 * width, 0.0));
 
 	drawShape(&head[5], mat);
+
+	mat = translate(head[6].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.035*width, 0.234 * width, 0.0));
+
+	drawShape(&head[6], mat);
+
+	mat = translate(head[6].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(- 0.035 * width, 0.234 * width, 0.0));
+	mat = scale(mat, vec3(-1, 1, 1.0));
+
+	drawShape(&head[6], mat);
+
+	mat = translate(head[7].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(0.0291 * width, 0.190 * width, 0.0));
+
+	drawShape(&head[7], mat);
+
+	mat = translate(head[7].Model, babyPos);
+	mat = scale(mat, babyScale);
+	mat = translate(mat, vec3(- 0.0291 * width, 0.190 * width, 0.0));
+
+	drawShape(&head[7], mat);
 
 
 
