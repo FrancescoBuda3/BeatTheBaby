@@ -156,7 +156,10 @@ void ViewImpl::init() {
 	crea_VAO_Vector(&polygon);
 	polygon.sceltaFs = 1;
 	polygon.render = GL_TRIANGLE_FAN;
+	
 	body.push_back(polygon);
+	
+	
 
 	Shape circle;
 	circle.nTriangles = 180;
@@ -216,7 +219,7 @@ void ViewImpl::init() {
 	Shape head5;
 	head5.nTriangles = 180;
 	head5.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 0.011 * width, 0.011 * width, &head5, vec4(61.0/255.0, 61.0/255.0, 61.0/255.0, 1.0));
+	costruisci_proiettile(0.0, 0.0, 0.009 * width, 0.009 * width, &head5, vec4(61.0/255.0, 61.0/255.0, 61.0/255.0, 1.0));
 	crea_VAO_Vector(&head5);
 	head5.sceltaFs = 1;
 	head5.render = GL_TRIANGLE_FAN;
@@ -251,6 +254,16 @@ void ViewImpl::init() {
 	head8.sceltaFs = 1;
 	head8.render = GL_TRIANGLE_FAN;
 	head.push_back(head8);
+
+	Shape head9;
+	head9.nTriangles = 600;
+	head9.Model = mat4(1.0);
+	crea_punti_forma_da_file("./Forme/cap.txt");
+	costruisci_formaHermite(vec4(9.0 / 225.0, 64.0 / 255.0, 116.0 / 255.0, 1.0), vec4(9.0 / 225.0, 64.0 / 255.0, 116.0 / 255.0, 1.0), &head9);
+	crea_VAO_Vector(&head9);
+	head9.sceltaFs = 1;
+	head9.render = GL_TRIANGLE_FAN;
+	head.push_back(head9);
 
 
 
@@ -347,6 +360,15 @@ void ViewImpl::drawScene() {
 	mat = scale(mat, vec3(-1.0, 1.0, 1.0));
 
 	drawShape(&arm, mat);
+
+	
+	mat = translate(head[8].Model, babyPos);
+	mat = translate(mat, vec3(0.0, -38.0, 0.0));
+	mat = scale(mat, babyScale);
+	mat = scale(mat, vec3(1.2, 1.2, 1.0));
+	mat = translate(mat, vec3(-0.004*width, 0.220*width, 0.0));
+
+	drawShape(&head[8], mat);
 
 	mat = translate(head[0].Model, babyPos);
 	mat = scale(mat, babyScale);

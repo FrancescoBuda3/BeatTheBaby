@@ -338,6 +338,7 @@ void crea_punti_forma_da_file(const char *filePath) // geom
 {
 	Curva.CP.clear();
 	Derivata.CP.clear();
+	Poligonale.CP.clear();
 	int i;
 	struct Dati {
 		float x;
