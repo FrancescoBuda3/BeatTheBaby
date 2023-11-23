@@ -27,7 +27,6 @@ void costruisci_piano(Shape* fig) //geom
 	for (i = 0; i < fig->vertici.size(); i++)
 		fig->colors.push_back(vec4(0.0, 56.0/255.0, 26.0/255.0, 1.0));
 	fig->nv = fig->vertici.size();
-	fig->sceltaFs = 1;
 	fig->render = GL_TRIANGLE_FAN;
 }
 
@@ -52,7 +51,6 @@ void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* f
 
 	}
 	fig->nv = fig->vertici.size();
-	fig->sceltaFs = 1;
 	fig->render = GL_TRIANGLE_FAN;
 
 }
@@ -317,7 +315,6 @@ void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Sha
 
 	//Aggiorno il numero dei vertici della figura
 	fig->nv = fig->vertici.size();
-	fig->sceltaFs = 1;
 	fig->render = GL_TRIANGLE_FAN;
 
 }

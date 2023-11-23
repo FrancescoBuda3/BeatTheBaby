@@ -143,7 +143,6 @@
     <ClCompile Include="WorldImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragmentShader_Onde_nuvole.glsl" />
     <None Include="packages.config" />
     <None Include="vertexShader_M.glsl" />
   </ItemGroup>

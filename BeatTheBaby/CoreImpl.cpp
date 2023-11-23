@@ -49,6 +49,7 @@ void CoreImpl::gameLoop(int value) {
 	long currentFrameStartTime = clock_c.getElapsedTime().asMilliseconds();
 	long elapsed = currentFrameStartTime - previousFrameStartTime;
 	update();
+	view_c->updateHead(elapsed);
 	glutPostRedisplay();
 	
 	previousFrameStartTime = currentFrameStartTime;
@@ -121,6 +122,7 @@ void CoreImpl::update() {
 				view_c->notifyYes();
 				jukebox_c->playYes();
 			}
+			view_c->notifyTime((1.0 / metronome_c->getBpm()) * 60 * 1000);
 		}
 		else if (buzz_c->checkClick()) {
 			jukebox_c->playClap();
@@ -186,6 +188,8 @@ void CoreImpl::initGame(int argc, char* argv[]) {
 	view_c->init();
 	clock_c.restart();
 	view_c->showMenu();
+	view_c->notifyTime((1.0 / metronome_c->getBpm()) * 60 * 1000);
+	cout << "init" << (1.0 / metronome_c->getBpm()) * 60 * 1000 << endl;
 	state_c = MENU;
 	world_c->generateNextTimeline();
 }

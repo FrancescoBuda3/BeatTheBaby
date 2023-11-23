@@ -27,6 +27,8 @@ public:
 	void notifyNo();
 	void notifyScore(long score);
 	void notifyLives(int lives);
+	void notifyTime(long timeMillis);
+	static void updateHead(int elapsed);
 	void INIT_SHADER();
 	static void drawShape(Shape* fig, mat4 model);
 };
