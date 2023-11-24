@@ -128,6 +128,7 @@ void CoreImpl::update() {
 			jukebox_c->playClap();
 			Score score = world_c->clap(metronome_c->getPos());
 			view_c->notifyClap(score, metronome_c->getPos() + tickCount_c -1);
+
 			if (score == MISS) {
 				missed_c = true;
 			}	

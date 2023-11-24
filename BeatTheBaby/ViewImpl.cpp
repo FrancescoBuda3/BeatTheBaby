@@ -55,9 +55,11 @@ void ViewImpl::notifyBoom(float pos) {
 }
 
 void ViewImpl::notifyClap(Score score, float pos) {
-	claps.push_back(booms.front());
-	booms.erase(booms.begin());
-	scores.push_back(score);
+	if (booms.size() > 0) {
+		claps.push_back(booms.front());
+		booms.erase(booms.begin());
+		scores.push_back(score);
+	}
 }
 
 void ViewImpl::notifyYes() {

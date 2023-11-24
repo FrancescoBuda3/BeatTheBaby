@@ -8,7 +8,9 @@ Score BeatImpl::checkClap(float timing) {
 	if (this->isFinished()) {
 		return Score::NONE;
 	}
+
 	float tmp = this->clapTimings.front();
+
 	std::cout << "click: " << timing << std::endl;
 	std::cout << "real: " << tmp << std::endl;
 	std::cout << abs(tmp-timing) << std::endl;

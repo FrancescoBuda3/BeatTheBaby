@@ -7,11 +7,13 @@ WorldImpl::WorldImpl() {
 };
 
 Score WorldImpl::clap(float pos) {
+	std::cout << "prima" << std::endl;
 	if (this->timeLine.size() == 0) {
 		return Score::NONE;
 	}
 	else {
 		Score ret = this->timeLine.front()->checkClap(pos);
+	
 		if (ret == Score::NONE) {
 			this->timeLine.pop_front();
 			return this->clap(pos);
@@ -23,9 +25,11 @@ Score WorldImpl::clap(float pos) {
 		else {
 			this->score += ret;
 		}
+
 		if (this->timeLine.front()->isFinished()) {
 			this->timeLine.pop_front();
 		}
+
 		return ret;
 	}
 };
