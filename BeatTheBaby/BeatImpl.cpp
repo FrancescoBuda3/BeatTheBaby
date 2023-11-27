@@ -11,9 +11,6 @@ Score BeatImpl::checkClap(float timing) {
 
 	float tmp = this->clapTimings.front();
 
-	std::cout << "click: " << timing << std::endl;
-	std::cout << "real: " << tmp << std::endl;
-	std::cout << abs(tmp-timing) << std::endl;
 	if (tmp == 0) {
 		tmp = timing < 0.5 ? 0 : 1;
 	}

@@ -13,18 +13,26 @@ float* t;
 mat4 Projection;
 float w_update, h_update;
 
+
+std::random_device dev;
+std::mt19937 gen(dev());
+std::uniform_int_distribution<std::mt19937::result_type> rand360(0, 360);
 int fs;
 int width = 1280;
 int height = 720;
+float boomsHeight = 3 * height / 4;
+float ballSpeed = 0.5;
 long tickTime;
 long timeElapsed;
 float headOffset = -10;
 bool moveHead = false;
 vec3 babyScale = vec3(0.7, 0.7, 1.0);
-vec3 babyPos = vec3(width/2, height/4, 0.0);
+vec3 babyPos = vec3(width / 2, height * 3 / 10, 0.0);
 Shape circleW;
 Shape circleR;
 Shape circleG;
+Shape phantomCircle;
+Shape phantomHeart;
 Shape heart;
 Shape arm;
 Shape background;
@@ -33,6 +41,7 @@ vector<Shape> head = {};
 vector<float> booms = {};
 vector<float> claps = {};
 vector<Score> scores = {};
+vector<Ball> balls = {};
 
 void ViewImpl::showMenu() {
 	moveHead = false;
@@ -47,18 +56,28 @@ void ViewImpl::showGameOver() {
 }
 
 void ViewImpl::notifyTick() {
-	background.sceltaFs = background.sceltaFs == 1 ? 2 : 1;
+	//background.sceltaFs = background.sceltaFs == 1 ? 2 : 1;
 }
 
 void ViewImpl::notifyBoom(float pos) {
-	booms.push_back(pos/3);
+	booms.push_back(pos / 3);
 }
 
 void ViewImpl::notifyClap(Score score, float pos) {
 	if (booms.size() > 0) {
 		claps.push_back(booms.front());
-		booms.erase(booms.begin());
 		scores.push_back(score);
+		Ball ball;
+		float prov = (width * (3.0 / 4) * booms.front() + width * (1.0 / 8));
+		if (score == Score::PERFECT) {
+			ball = { phantomHeart, prov, boomsHeight, (float)rand360(gen) };
+		}
+		else {
+			ball = { phantomCircle, prov, boomsHeight, (float)rand360(gen) };
+		}
+		ball.shape.alive = true;
+		balls.push_back(ball);
+		booms.erase(booms.begin());
 	}
 }
 
@@ -133,10 +152,26 @@ void ViewImpl::init() {
 
 	circleG.nTriangles = 180;
 	circleG.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0, 1, 0, 1));
+	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
 	crea_VAO_Vector(&circleG);
 	circleG.render = GL_TRIANGLE_FAN;
 	circleG.sceltaFs = 0;
+
+	phantomCircle.nTriangles = 180;
+	phantomCircle.Model = mat4(1.0);
+	costruisci_proiettile(0.0, 0.0, 30.0, 30.0, &phantomCircle, vec4(1, 1, 1, 0.5));
+	crea_VAO_Vector(&phantomCircle);
+	phantomCircle.render = GL_TRIANGLE_FAN;
+	phantomCircle.sceltaFs = 0;
+	addBoundingBox(&phantomCircle);
+
+	phantomHeart.nTriangles = 180;
+	phantomHeart.Model = mat4(1.0);
+	costruisci_cuore(0.0, 0.0, 2.0, 2.0, &phantomHeart);
+	crea_VAO_Vector(&phantomHeart);
+	phantomHeart.render = GL_TRIANGLE_FAN;
+	phantomHeart.sceltaFs = 0;
+	addBoundingBox(&phantomHeart);
 
 
 	heart.nTriangles = 180;
@@ -315,7 +350,7 @@ void ViewImpl::drawScene() {
 	mat = scale(mat, vec3(width, height, 1.0));
 	drawShape(&background, mat);
 
-
+	drawBalls();
 	drawBooms();
 	drawClaps();
 
@@ -478,7 +513,7 @@ void ViewImpl::drawScene() {
 
 void ViewImpl::drawBooms() {
 	for (float boom : booms) {
-		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), 3*height/4, 0.0));
+		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), boomsHeight, 0.0));
 		mat = scale(mat, vec3(20.5, 20.5, 1.0));
 		drawShape(&circleW, mat);
 	}
@@ -506,6 +541,15 @@ void ViewImpl::drawClaps() {
 		}
 		drawShape(&fig, mat);
 		i++;
+	}
+}
+
+void ViewImpl::drawBalls() {
+	for (Ball ball : balls) {
+		if (ball.shape.alive) {
+			mat4 mat = translate(ball.shape.Model, vec3(ball.x, ball.y, 0.0));
+			drawShape(&ball.shape, mat);
+		}
 	}
 }
 
@@ -564,10 +608,68 @@ void ViewImpl::updateHead(int elapsed) {
 	if (moveHead) {
 	timeElapsed += elapsed;
 	timeElapsed = (timeElapsed >= tickTime ? 0 : timeElapsed);
-	cout << timeElapsed << endl;
 	headOffset = -(40.0 / pow(tickTime, 2)) * pow(timeElapsed, 2) + (40.0 / tickTime) * timeElapsed - 10;
-	cout << headOffset << endl;
 	}
+}
+
+void ViewImpl::updateBalls(int elapsed) {
+	cout << balls.size() << endl;
+	float dx;
+	float dy;
+	for (int i = 0; i < balls.size(); i++) {
+		Ball *ball = &balls[i];
+		cout << "1" << endl;
+		dx = elapsed * ballSpeed * cos(degtorad(ball->angle));
+		dy = elapsed * ballSpeed * sin(degtorad(ball->angle));
+		cout << "2" << endl;
+
+		if (ball->x + dx > width || ball->x + dx < 0) {
+			cout << "3" << endl;
+			ball->angle = 180 - ball->angle;
+			dx = -dx;
+			cout << "4" << endl;
+		}
+		if (ball->y + dy > height || ball->y + dy < 0) {
+			cout << "5" << endl;
+			ball->angle = 360 - ball->angle;
+			dy = -dy;
+			cout << "6" << endl;
+		}
+
+		ball->x += dx;
+		ball->y += dy;
+		ball->shape.corner_b_obj = ball->shape.corner_b_obj + vec4(vec3(dx, dy, 0.0), 1.0);
+		ball->shape.corner_t_obj = ball->shape.corner_t_obj + vec4(vec3(dx, dy, 0.0), 1.0);
+		cout << "7" << endl;
+	}
+
+	for (int i = 0; i < balls.size(); i++) {
+		cout << "8" << endl;
+		for (int j = 0; j < balls.size(); j++) {
+			cout << "9" << endl;
+			if (i != j) {
+				cout << "10" << endl;
+				cout << "i: " << i << " j: " << j << endl;
+				if (checkCollision(balls[i].shape, balls[j].shape)) {
+					cout << "collision" << endl;
+					balls[i].shape.alive = false;
+					balls[j].shape.alive = false;
+					cout << "11" << endl;
+				}
+			}
+		}
+	}
+
+	
+
+	for (int i = 0; i < balls.size(); i++) {
+		cout << "12" << endl;
+		if (!balls[i].shape.alive){
+			cout << "13" << endl;
+			balls.erase(balls.begin() + i);
+		}
+	}
+	cout << "fine update" << endl;
 }
 
 void reshape(int w, int h)
@@ -590,4 +692,6 @@ void reshape(int w, int h)
 		h_update = (float)h;
 	}
 }
+
+
 

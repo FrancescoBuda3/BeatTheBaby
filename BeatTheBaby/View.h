@@ -4,7 +4,14 @@
 #include "Common.h"
 #include "GestioneGeometria.h"
 #include "Lib.h"
+#include <random>
 
+typedef struct {
+	Shape shape;
+	float x;
+	float y;
+	float angle;
+} Ball;
 
 class ViewImpl {
 private:
@@ -15,6 +22,7 @@ private:
 public:
 	static void drawBooms();
 	static void drawClaps();
+	static void drawBalls();
 	void init();
 	static void drawScene();
 	void showMenu();
@@ -29,6 +37,7 @@ public:
 	void notifyLives(int lives);
 	void notifyTime(long timeMillis);
 	static void updateHead(int elapsed);
+	static void updateBalls(int elapsed);
 	void INIT_SHADER();
 	static void drawShape(Shape* fig, mat4 model);
 };

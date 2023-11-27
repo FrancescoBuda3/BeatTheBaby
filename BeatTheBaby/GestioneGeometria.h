@@ -57,5 +57,6 @@ void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Sha
 bool checkCollision(Shape obj1, Shape obj2);
 void crea_punti_forma_da_file(const char *filePath);
 void reshape(int w, int h);
+void addBoundingBox(Shape* fig);
 
 

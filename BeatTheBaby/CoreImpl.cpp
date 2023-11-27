@@ -50,6 +50,7 @@ void CoreImpl::gameLoop(int value) {
 	long elapsed = currentFrameStartTime - previousFrameStartTime;
 	update();
 	view_c->updateHead(elapsed);
+	view_c->updateBalls(elapsed);
 	glutPostRedisplay();
 	
 	previousFrameStartTime = currentFrameStartTime;

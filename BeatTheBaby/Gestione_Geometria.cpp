@@ -249,11 +249,7 @@ void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Sha
 	int i;
 	float stepA = (2 * PI) / fig->nTriangles;
 	float t;
-	float xmax = 0;
-	float xmin = 0;
 
-	float ymax = 0;
-	float ymin = 0;
 
 	fig->vertici.push_back(vec3(cx, cy, 0.0));
 
@@ -319,16 +315,60 @@ void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Sha
 
 }
 
+void addBoundingBox(Shape *fig) {
+	float xmax = 0;
+	float xmin = 0;
+
+	float ymax = 0;
+	float ymin = 0;
+	int i;
+
+	for (i = 1; i < fig->nv; i++)
+	{
+
+		if (fig->vertici[i].x < xmin)
+			xmin = fig->vertici[i].x;
+	}
+
+	for (i = 1; i < fig->nv; i++)
+	{
+
+		if (fig->vertici[i].x > xmax)
+			xmax = fig->vertici[i].x;
+	}
+	for (i = 1; i < fig->nv; i++)
+	{
+		if (fig->vertici[i].y <= ymin)
+			ymin = fig->vertici[i].y;
+	}
+
+	for (i = 1; i < fig->nv; i++)
+	{
+		if (fig->vertici[i].y > ymax)
+			ymax = fig->vertici[i].y;
+	}
+
+	fig->corner_b_obj = vec4(xmin, ymin, 0.0, 1.0);
+	fig->corner_t_obj = vec4(xmax, ymax, 0.0, 1.0);
+
+	cout << "corner_b_obj: " << fig->corner_b_obj.x << " " << fig->corner_b_obj.y << endl;
+	cout << "corner_t_obj: " << fig->corner_t_obj.x << " " << fig->corner_t_obj.y << endl;
+}
+
 bool checkCollision(Shape obj1, Shape obj2) { //geom
+	cout << "10.1" << endl;
 	// guardo collisioni su asse x
-	bool collisionX = obj1.corner_b.x <= obj2.corner_t.x &&
-		obj1.corner_t.x >= obj2.corner_b.x;
+	bool collisionX = obj1.corner_b_obj.x <= obj2.corner_t_obj.x &&
+		obj1.corner_t_obj.x >= obj2.corner_b_obj.x;
+	cout << "10.2" << endl;
 
 	// guardo collisioni su asse y
-	bool collisionY = obj1.corner_b.y <= obj2.corner_t.y &&
-		obj1.corner_t.y >= obj2.corner_b.y;
+	bool collisionY = obj1.corner_b_obj.y <= obj2.corner_t_obj.y &&
+		obj1.corner_t_obj.y >= obj2.corner_b_obj.y;
+	cout << "10.3" << endl;
 	//Si ha collisione se c'è collisione sia nella direzione x che nella direzione y
-
+	cout << collisionX << " " << collisionY << endl;
+	cout << "10.4" << endl;
 	return collisionX && collisionY;
 }
 void crea_punti_forma_da_file(const char *filePath) // geom

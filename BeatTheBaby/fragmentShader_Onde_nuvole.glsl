@@ -14,6 +14,7 @@ float frequency = 10.0;
 
 void main() {
     vec3 finalColor = vec3(0.0);
+    vec3 waveColor;
 
     if (scelta_fs == 0) {
         FragColor = ourColor;
@@ -25,16 +26,16 @@ void main() {
             // Calcoliamo l'altezza dell'onda usando una funzione sinusoidale
             float waveHeight;
             if (scelta_fs == 1) {
-                waveHeight = sin(ndc.x * frequency + time + float(i) * 0.008) * amplitude;
+                waveColor = vec3(0.0, 175.0/255.0, 84.0/255.0);
             } else {
-                frequency = 3;
-                amplitude = 0.1;
-                waveHeight = abs(fract(ndc.x * frequency + time + float(i) * 0.002) * 2.0 - 1.0) * amplitude;
+                waveColor = vec3(235.0/255.0, 231.0/255.0, 163.0/255.0);
             }
+            
+            waveHeight = sin(ndc.x * frequency + time + float(i) * 0.008) * amplitude;
 
             // Se il frammento è nella parte inferiore o superiore dello schermo, coloriamo con il colore dell'onda
             if (abs(ndc.y) > 0.8 + waveHeight) {
-                finalColor += vec3(0.0, 175.0/255.0, 84.0/255.0); // Colore dell'onda (blu)
+                finalColor += waveColor; // Colore dell'onda (blu)
             } else {
                 finalColor += ourColor.rgb; // Colore di sfondo
             }
