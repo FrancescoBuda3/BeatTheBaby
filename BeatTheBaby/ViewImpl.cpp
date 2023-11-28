@@ -545,11 +545,16 @@ void ViewImpl::drawClaps() {
 }
 
 void ViewImpl::drawBalls() {
-	for (Ball ball : balls) {
-		if (ball.shape.alive) {
-			mat4 mat = translate(ball.shape.Model, vec3(ball.x, ball.y, 0.0));
-			drawShape(&ball.shape, mat);
-		}
+	for (int i = 0; i < balls.size(); i++) {
+		Ball *ball = &balls[i];
+		if (ball->shape.alive) {
+			mat4 mat = translate(ball->shape.Model, vec3(ball->x, ball->y, 0.0));
+			drawShape(&ball->shape, mat);
+			ball->shape.corner_b = ball->shape.corner_b_obj;
+			ball->shape.corner_t = ball->shape.corner_t_obj;
+			ball->shape.corner_b = mat * ball->shape.corner_b;
+			ball->shape.corner_t = mat * ball->shape.corner_t;
+		}	
 	}
 }
 
@@ -613,48 +618,32 @@ void ViewImpl::updateHead(int elapsed) {
 }
 
 void ViewImpl::updateBalls(int elapsed) {
-	cout << balls.size() << endl;
 	float dx;
 	float dy;
 	for (int i = 0; i < balls.size(); i++) {
 		Ball *ball = &balls[i];
-		cout << "1" << endl;
 		dx = elapsed * ballSpeed * cos(degtorad(ball->angle));
 		dy = elapsed * ballSpeed * sin(degtorad(ball->angle));
-		cout << "2" << endl;
 
 		if (ball->x + dx > width || ball->x + dx < 0) {
-			cout << "3" << endl;
 			ball->angle = 180 - ball->angle;
 			dx = -dx;
-			cout << "4" << endl;
 		}
 		if (ball->y + dy > height || ball->y + dy < 0) {
-			cout << "5" << endl;
 			ball->angle = 360 - ball->angle;
 			dy = -dy;
-			cout << "6" << endl;
 		}
 
 		ball->x += dx;
 		ball->y += dy;
-		ball->shape.corner_b_obj = ball->shape.corner_b_obj + vec4(vec3(dx, dy, 0.0), 1.0);
-		ball->shape.corner_t_obj = ball->shape.corner_t_obj + vec4(vec3(dx, dy, 0.0), 1.0);
-		cout << "7" << endl;
 	}
 
 	for (int i = 0; i < balls.size(); i++) {
-		cout << "8" << endl;
 		for (int j = 0; j < balls.size(); j++) {
-			cout << "9" << endl;
 			if (i != j) {
-				cout << "10" << endl;
-				cout << "i: " << i << " j: " << j << endl;
 				if (checkCollision(balls[i].shape, balls[j].shape)) {
-					cout << "collision" << endl;
 					balls[i].shape.alive = false;
 					balls[j].shape.alive = false;
-					cout << "11" << endl;
 				}
 			}
 		}
@@ -663,13 +652,10 @@ void ViewImpl::updateBalls(int elapsed) {
 	
 
 	for (int i = 0; i < balls.size(); i++) {
-		cout << "12" << endl;
 		if (!balls[i].shape.alive){
-			cout << "13" << endl;
 			balls.erase(balls.begin() + i);
 		}
 	}
-	cout << "fine update" << endl;
 }
 
 void reshape(int w, int h)
