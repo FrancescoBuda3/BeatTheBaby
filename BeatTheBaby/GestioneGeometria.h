@@ -44,7 +44,7 @@ typedef struct {
 
 void costruisci_poligono(Shape* fig, vec4 colorRGBA, vector<vec3> vertex);
 void costruisci_piano(Shape* fig);
-void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* fig);
+void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, vec4 color, Shape* fig);
 void costruisci_farfalla(float cx, float cy, float raggiox, float raggioy, Shape* fig);
 float dx(int i, float* t, float Tens, float Bias, float Cont, Shape* Fig);
 float dy(int i, float* t, float Tens, float Bias, float Cont, Shape* Fig);

@@ -113,7 +113,7 @@ void ViewImpl::init() {
 	glutCreateWindow("Modellazione Scena 2D");
 	
 
-	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClearColor(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glutDisplayFunc(drawScene);
@@ -167,7 +167,7 @@ void ViewImpl::init() {
 
 	phantomHeart.nTriangles = 180;
 	phantomHeart.Model = mat4(1.0);
-	costruisci_cuore(0.0, 0.0, 2.0, 2.0, &phantomHeart);
+	costruisci_cuore(0.0, 0.0, 2.0, 2.0, vec4(1, 1, 1, 0.5), & phantomHeart);
 	crea_VAO_Vector(&phantomHeart);
 	phantomHeart.render = GL_TRIANGLE_FAN;
 	phantomHeart.sceltaFs = 0;
@@ -176,7 +176,7 @@ void ViewImpl::init() {
 
 	heart.nTriangles = 180;
 	heart.Model = mat4(1.0);
-	costruisci_cuore(0.0, 0.0, 1.0, 1.0, &heart);
+	costruisci_cuore(0.0, 0.0, 1.0, 1.0, vec4(1.0, 204.0 / 255.0, 0.0, 1.0), & heart);
 	crea_VAO_Vector(&heart);
 	heart.render = GL_TRIANGLE_FAN;
 	heart.sceltaFs = 0;
@@ -335,7 +335,7 @@ void ViewImpl::init() {
 }
 
 void ViewImpl::drawScene() {
-	glClearColor(0.0, 0.0, 0.5, 1.0);
+	glClearColor(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	vec2 resolution = vec2(w_update, h_update);
@@ -665,7 +665,7 @@ void reshape(int w, int h)
 	float AspectRatio_mondo = (float)(width) / (float)(height); //Rapporto larghezza altezza di tutto ci  che   nel mondo
 	//Se l'aspect ratio del mondo   diversa da quella della finestra devo mappare in modo diverso 
 	//per evitare distorsioni del disegno
-	if (AspectRatio_mondo > w / h)   //Se ridimensioniamo la larghezza della Viewport
+	if (AspectRatio_mondo > (float)w / h)   //Se ridimensioniamo la larghezza della Viewport
 	{
 		glViewport(0, 0, w, w / AspectRatio_mondo);
 		w_update = (float)w;
@@ -673,10 +673,11 @@ void reshape(int w, int h)
 	}
 	else {  //Se ridimensioniamo la larghezza della viewport oppure se l'aspect ratio tra la finestra del mondo 
 		//e la finestra sullo schermo sono uguali
-		glViewport(0, 0, h * AspectRatio_mondo, h);
+		glViewport(w/2 - h * AspectRatio_mondo/2, 0, h* AspectRatio_mondo, h);
 		w_update = h * AspectRatio_mondo;
 		h_update = (float)h;
 	}
+
 }
 
 

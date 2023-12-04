@@ -30,7 +30,7 @@ void costruisci_piano(Shape* fig) //geom
 	fig->render = GL_TRIANGLE_FAN;
 }
 
-void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* fig) { //geom
+void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, vec4 color, Shape* fig) { //geom
 
 	int i;
 	float stepA = (2 * PI) / fig->nTriangles;
@@ -39,14 +39,15 @@ void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, Shape* f
 
 	fig->vertici.push_back(vec3(cx, cy, 0.0));
 
-	fig->colors.push_back(vec4(1.0, 204.0 / 255.0, 0.0, 1.0));
+	fig->colors.push_back(color);
+	//vec4(1.0, 204.0 / 255.0, 0.0, 1.0)
 
 	for (i = 0; i <= fig->nTriangles; i++)
 	{
 		t = (float)i * stepA;
 		fig->vertici.push_back(vec3(cx + raggiox * (16 * pow(sin(t), 3)), cy + raggioy * ((13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t))), 0.0));
 		//Colore 
-		fig->colors.push_back(vec4(1.0, 204.0 / 255.0, 0.0, 1.0));
+		fig->colors.push_back(color);
 
 
 	}
@@ -264,50 +265,6 @@ void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Sha
 	}
 
 	fig->nv = fig->vertici.size();
-
-	/*
-	//Costruisco xmin,ymin, xmax,ymax peer identificare il Bounding Box del Proiettile
-	for (i = 1; i < fig->nv; i++)
-	{
-
-		if (fig->vertici[i].x < xmin)
-			xmin = fig->vertici[i].x;
-	}
-
-	for (i = 1; i < fig->nv; i++)
-	{
-
-		if (fig->vertici[i].x > xmax)
-			xmax = fig->vertici[i].x;
-	}
-	for (i = 1; i < fig->nv; i++)
-	{
-		if (fig->vertici[i].y <= ymin)
-			ymin = fig->vertici[i].y;
-	}
-
-	for (i = 1; i < fig->nv; i++)
-	{
-		if (fig->vertici[i].y > ymax)
-			ymax = fig->vertici[i].y;
-	}
-	//Aggiorno i valori del corner più in basso a sinistra (corner_b) e del corner più in alto a destra (conrner_t)
-
-	fig->corner_b_obj = vec4(xmin, ymin, 0.0, 1.0);
-	fig->corner_t_obj = vec4(xmax, ymax, 0.0, 1.0);
-	//Aggiungo i vertici della spezzata per costruire il bounding box
-	fig->vertici.push_back(vec3(xmin, ymin, 0.0));
-	fig->colors.push_back(vec4(1.0, 0.0, 0.0, 1.0));
-	fig->vertici.push_back(vec3(xmax, ymin, 0.0));
-	fig->colors.push_back(vec4(1.0, 0.0, 0.0, 1.0));
-	fig->vertici.push_back(vec3(xmax, ymax, 0.0));
-	fig->colors.push_back(vec4(1.0, 0.0, 0.0, 1.0));
-	fig->vertici.push_back(vec3(xmin, ymin, 0.0));
-	fig->colors.push_back(vec4(1.0, 0.0, 0.0, 1.0));
-	fig->vertici.push_back(vec3(xmin, ymax, 0.0));
-	fig->colors.push_back(vec4(1.0, 0.0, 0.0, 1.0));
-	fig->vertici.push_back(vec3(xmax, ymax, 0.0));
-	fig->colors.push_back(vec4(1.0, 0.0, 0.0, 1.0)); */
 
 	//Aggiorno il numero dei vertici della figura
 	fig->nv = fig->vertici.size();
