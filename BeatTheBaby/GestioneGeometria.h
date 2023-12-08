@@ -30,7 +30,7 @@ typedef struct {
 	int nv;
 	// Numero massimo di punti di interpolazione
 	int ncp;
-	//Matrice di Modellazione: Traslazione*Rotazione*Scala
+	//Matrice di Modellazione
 	mat4 Model;
 	int sceltaFs;
 	char render;
@@ -45,15 +45,14 @@ typedef struct {
 void costruisci_poligono(Shape* fig, vec4 colorRGBA, vector<vec3> vertex);
 void costruisci_piano(Shape* fig);
 void costruisci_cuore(float cx, float cy, float raggiox, float raggioy, vec4 color, Shape* fig);
-void costruisci_farfalla(float cx, float cy, float raggiox, float raggioy, Shape* fig);
 float dx(int i, float* t, float Tens, float Bias, float Cont, Shape* Fig);
 float dy(int i, float* t, float Tens, float Bias, float Cont, Shape* Fig);
 float DX(int i, float* t);
 float DY(int i, float* t);
 void InterpolazioneHermite(float* t, Shape* Fig, vec4 color_top, vec4 color_bot);
 void costruisci_formaHermite(vec4 color_top, vec4 color_bot, Shape* forma);
-double  degtorad(double angle);
-void costruisci_proiettile(float cx, float cy, float raggiox, float raggioy, Shape* fig, vec4 colorRGBA);
+double degtorad(double angle);
+void costruisci_cerchio(float cx, float cy, float raggiox, float raggioy, Shape* fig, vec4 colorRGBA);
 bool checkCollision(Shape obj1, Shape obj2);
 void crea_punti_forma_da_file(const char *filePath);
 void reshape(int w, int h);

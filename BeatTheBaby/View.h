@@ -13,34 +13,28 @@ typedef struct {
 	float angle;
 } Ball;
 
-class ViewImpl {
-private:
-	
+void crea_VAO_Vector(Shape* fig);
+void drawBooms();
+void drawClaps();
+void drawBalls();
+void init();
+void drawScene();
+void showMenu();
+void showGame();
+void showGameOver();
+void notifyTick();
+void notifyBoom(float pos);
+void notifyClap(Score score, float pos);
+void notifyYes();
+void notifyNo();
+void notifyScore(long score);
+void notifyLives(int lives);
+void notifyTime(long timeMillis);
+void updateHead(int elapsed);
+void updateBalls(int elapsed);
+void INIT_SHADER();
+void drawShape(Shape* fig, mat4 model);
 
-	void crea_VAO_Vector(Shape* fig);
-
-public:
-	static void drawBooms();
-	static void drawClaps();
-	static void drawBalls();
-	void init();
-	static void drawScene();
-	void showMenu();
-	void showGame();
-	void showGameOver();
-	void notifyTick();
-	void notifyBoom(float pos);
-	void notifyClap(Score score, float pos);
-	void notifyYes();
-	void notifyNo();
-	void notifyScore(long score);
-	void notifyLives(int lives);
-	void notifyTime(long timeMillis);
-	static void updateHead(int elapsed);
-	static void updateBalls(int elapsed);
-	void INIT_SHADER();
-	static void drawShape(Shape* fig, mat4 model);
-};
 
 #endif 
 

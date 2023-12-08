@@ -7,7 +7,6 @@ WorldImpl::WorldImpl() {
 };
 
 Score WorldImpl::clap(float pos) {
-	std::cout << "prima" << std::endl;
 	if (this->timeLine.size() == 0) {
 		return Score::NONE;
 	}
@@ -20,7 +19,6 @@ Score WorldImpl::clap(float pos) {
 		}
 		if (ret == Score::MISS) {
 			this->lives == 0? this->lives = 0 : this->lives--;
-			std::cout << "Missed! Lives: " << this->lives << std::endl;
 		}
 		else {
 			this->score += ret;
@@ -63,7 +61,12 @@ void WorldImpl::generateNextTimeline() {
 };
 
 bool WorldImpl::isTimelineOver() {
-	return this->timeLine.size() == 0;
+	if (this->timeLine.size() == 0) {
+		return true;
+	}
+	else {
+		return this->timeLine.front()->isFinished();
+	}
 };
 
 void WorldImpl::reset() {

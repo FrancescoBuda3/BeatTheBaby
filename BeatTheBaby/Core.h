@@ -8,6 +8,7 @@
 #include "Buzz.h"
 #include "Beat.h"
 #include "View.h"
+#include "Core.h"
 #include <SFML/system.hpp>
 
 
@@ -19,28 +20,12 @@
 
 enum gameState { MENU, INTRO, SHOW, DELAY, FEEDBACK, PLAY, GAMEOVER };
 
-class Core {
-public:
-	virtual void startGame(int argc, char* argv[]) = 0;
-	virtual void setMetronome(int bpm) = 0;
-	virtual void setJukebox(Jukebox *soundSet) = 0;
-	virtual void setWorld(World *world) = 0;
-	virtual void setBuzz(Buzz *buzz) = 0;
-};
 
-class CoreImpl : public Core {
-	
-public:
-	CoreImpl();
-	void initGame(int argc, char* argv[]);
-	void startGame(int argc, char* argv[]);
-	void setMetronome(int bpm);
-	void setJukebox(Jukebox *soundSet);
-	void setWorld(World *world);
-	void setBuzz(Buzz *buzz);
-	static void gameLoop(int value);
-	static void update();
-	static void waitForNextFrame(long startTime);
-};
+void initGame(int argc, char* argv[]);
+void startGame(int argc, char* argv[]);
+void gameLoop(int value);
+void update();
+void waitForNextFrame(long startTime);
+
 
 #endif

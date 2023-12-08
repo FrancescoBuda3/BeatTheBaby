@@ -5,10 +5,8 @@
 
 
 static unsigned int programId;
-GLuint MatProj, MatModel, loctime, locres, locCol1, locCol2, locCol3, locSceltafs;
-Shape  Farf, Cuore, piano, Proiettile;
+GLuint MatProj, MatModel, loctime, locres, locSceltafs;
 Shape Curva, Poligonale, Derivata, shape;
-int pval = 600;
 float* t;
 mat4 Projection;
 float w_update, h_update;
@@ -43,27 +41,27 @@ vector<float> claps = {};
 vector<Score> scores = {};
 vector<Ball> balls = {};
 
-void ViewImpl::showMenu() {
+void showMenu() {
 	moveHead = false;
 }
 
-void ViewImpl::showGame() {
+void showGame() {
 	moveHead = true;
 }
 
-void ViewImpl::showGameOver() {
+void showGameOver() {
 	moveHead = false;
 }
 
-void ViewImpl::notifyTick() {
-	//background.sceltaFs = background.sceltaFs == 1 ? 2 : 1;
+void notifyTick() {
+
 }
 
-void ViewImpl::notifyBoom(float pos) {
+void notifyBoom(float pos) {
 	booms.push_back(pos / 3);
 }
 
-void ViewImpl::notifyClap(Score score, float pos) {
+void notifyClap(Score score, float pos) {
 	if (booms.size() > 0) {
 		claps.push_back(booms.front());
 		scores.push_back(score);
@@ -81,27 +79,27 @@ void ViewImpl::notifyClap(Score score, float pos) {
 	}
 }
 
-void ViewImpl::notifyYes() {
+void notifyYes() {
 }
 
-void ViewImpl::notifyNo() {
+void notifyNo() {
 }
 
-void ViewImpl::notifyTime(long timeMillis) {
+void notifyTime(long timeMillis) {
 	tickTime = timeMillis;
 }
 
-void ViewImpl::notifyScore(long score) {
+void notifyScore(long score) {
 	booms.clear();
 	claps.clear();
 	scores.clear();
 }
 
-void ViewImpl::notifyLives(int lives) {
+void notifyLives(int lives) {
 
 }
 
-void ViewImpl::init() {
+void init() {
 
 	glutInitContextVersion(4, 0);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
@@ -134,9 +132,10 @@ void ViewImpl::init() {
 	glutSetOption(GLUT_MULTISAMPLE, 16);
 	glEnable(GL_MULTISAMPLE);
 	
+
 	circleW.nTriangles = 180;
 	circleW.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleW, vec4(1,1,1,1));
+	costruisci_cerchio(0.0, 0.0, 1.0, 1.0, &circleW, vec4(1,1,1,1));
 	crea_VAO_Vector(&circleW);
 	circleW.render = GL_TRIANGLE_FAN;
 	circleW.sceltaFs = 0;
@@ -144,7 +143,7 @@ void ViewImpl::init() {
 
 	circleR.nTriangles = 180;
 	circleR.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleR, vec4(1, 0, 0, 1));
+	costruisci_cerchio(0.0, 0.0, 1.0, 1.0, &circleR, vec4(1, 0, 0, 1));
 	crea_VAO_Vector(&circleR);
 	circleR.render = GL_TRIANGLE_FAN;
 	circleR.sceltaFs = 0;
@@ -152,14 +151,14 @@ void ViewImpl::init() {
 
 	circleG.nTriangles = 180;
 	circleG.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 1.0, 1.0, &circleG, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
 	crea_VAO_Vector(&circleG);
 	circleG.render = GL_TRIANGLE_FAN;
 	circleG.sceltaFs = 0;
 
 	phantomCircle.nTriangles = 180;
 	phantomCircle.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 30.0, 30.0, &phantomCircle, vec4(1, 1, 1, 0.5));
+	costruisci_cerchio(0.0, 0.0, 30.0, 30.0, &phantomCircle, vec4(1, 1, 1, 0.5));
 	crea_VAO_Vector(&phantomCircle);
 	phantomCircle.render = GL_TRIANGLE_FAN;
 	phantomCircle.sceltaFs = 0;
@@ -181,6 +180,7 @@ void ViewImpl::init() {
 	heart.render = GL_TRIANGLE_FAN;
 	heart.sceltaFs = 0;
 
+	// COSTRUZIONE BRACCIO
 	arm.nTriangles = 600;
 	arm.Model = mat4(1.0);
 	crea_punti_forma_da_file("./Forme/arm.txt");
@@ -189,7 +189,7 @@ void ViewImpl::init() {
 	arm.sceltaFs= 0;
 	arm.render = GL_TRIANGLE_FAN;
 
-
+	// COSTRUZIONE SFONDO
 	background.nTriangles = 2;
 	background.Model = mat4(1.0);
 	costruisci_piano(&background);
@@ -197,6 +197,7 @@ void ViewImpl::init() {
 	background.sceltaFs = 1;
 	background.render = GL_TRIANGLE_STRIP;
 
+	// COSTRUZIONE CORPO
 	Shape polygon;
 	polygon.nTriangles = 10;
 	polygon.Model = mat4(1.0);
@@ -212,16 +213,17 @@ void ViewImpl::init() {
 	body.push_back(polygon);
 	
 	
-
+	// COSTRUZIONE VERTICI ARROTONDATI DEL CORPO
 	Shape circle;
 	circle.nTriangles = 180;
 	circle.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 33.5, 33.5, &circle, vec4(235.0 / 255.0, 231.0 / 255.0, 163.0 / 255.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 33.5, 33.5, &circle, vec4(235.0 / 255.0, 231.0 / 255.0, 163.0 / 255.0, 1.0));
 	crea_VAO_Vector(&circle);
 	circle.sceltaFs = 0;
 	circle.render = GL_TRIANGLE_FAN;
 	body.push_back(circle);
 
+	// COSTRUZIONE GAMBA
 	Shape body1;
 	body1.nTriangles = 180;
 	body1.Model = mat4(1.0);
@@ -232,51 +234,58 @@ void ViewImpl::init() {
 	body1.render = GL_TRIANGLE_FAN;
 	body.push_back(body1);
 
+	
+	// COSTRUZIONE PARTE SOTTO DELLA FACCIA
 	Shape head1;
 	head1.nTriangles = 180;
 	head1.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 0.06*width, 0.06*width, &head1, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 0.06*width, 0.06*width, &head1, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
 	crea_VAO_Vector(&head1);
 	head1.sceltaFs = 0;
 	head1.render = GL_TRIANGLE_FAN;
 	head.push_back(head1);
 
+	// COSTRUZIONE PARTE SOPRA DELLA FACCIA
 	Shape head2;
 	head2.nTriangles = 180;
 	head2.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 0.075 * width, 0.075 * width, &head2, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 0.075 * width, 0.075 * width, &head2, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
 	crea_VAO_Vector(&head2);
 	head2.sceltaFs = 0;
 	head2.render = GL_TRIANGLE_FAN;
 	head.push_back(head2);
 
+	// COSTRUZIONE ORECCHIO
 	Shape head3;
 	head3.nTriangles = 180;
 	head3.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 0.025 * width, 0.025 * width, &head3, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 0.025 * width, 0.025 * width, &head3, vec4(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0));
 	crea_VAO_Vector(&head3);
 	head3.sceltaFs = 0;
 	head3.render = GL_TRIANGLE_FAN;
 	head.push_back(head3);
 
+	// COSTRUZIONE OCCHIO
 	Shape head4;
 	head4.nTriangles = 180;
 	head4.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 0.022 * width, 0.022 * width, &head4, vec4(1.0, 1.0, 1.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 0.022 * width, 0.022 * width, &head4, vec4(1.0, 1.0, 1.0, 1.0));
 	crea_VAO_Vector(&head4);
 	head4.sceltaFs = 0;
 	head4.render = GL_TRIANGLE_FAN;
 	head.push_back(head4);
 
+	// COSTRUZIONE PUPILLA
 	Shape head5;
 	head5.nTriangles = 180;
 	head5.Model = mat4(1.0);
-	costruisci_proiettile(0.0, 0.0, 0.009 * width, 0.009 * width, &head5, vec4(61.0/255.0, 61.0/255.0, 61.0/255.0, 1.0));
+	costruisci_cerchio(0.0, 0.0, 0.009 * width, 0.009 * width, &head5, vec4(61.0/255.0, 61.0/255.0, 61.0/255.0, 1.0));
 	crea_VAO_Vector(&head5);
 	head5.sceltaFs = 0;
 	head5.render = GL_TRIANGLE_FAN;
 	head.push_back(head5);
 
+	// COSTRUZIONE BOCCA
 	Shape head6;
 	head6.nTriangles = 1;
 	head6.Model = mat4(1.0);
@@ -287,6 +296,7 @@ void ViewImpl::init() {
 	head6.render = GL_LINE;
 	head.push_back(head6);
 
+	// COSTRUZIONE CORNA
 	Shape head7;
 	head7.nTriangles = 180;
 	head7.Model = mat4(1.0);
@@ -297,6 +307,7 @@ void ViewImpl::init() {
 	head7.render = GL_TRIANGLE_FAN;
 	head.push_back(head7);
 
+	// COSTRUZIONE SOPRACCIGLIA
 	Shape head8;
 	head8.nTriangles = 600;
 	head8.Model = mat4(1.0);
@@ -307,6 +318,7 @@ void ViewImpl::init() {
 	head8.render = GL_TRIANGLE_FAN;
 	head.push_back(head8);
 
+	// COSTRUZIONE CAPPELLO
 	Shape head9;
 	head9.nTriangles = 600;
 	head9.Model = mat4(1.0);
@@ -326,7 +338,6 @@ void ViewImpl::init() {
 	glViewport(0, 0, width, height);
 
 	MatProj = glGetUniformLocation(programId, "Projection");
-	//Viene ricavata la location della variabile Uniform Model presente nel fragment shader
 	MatModel = glGetUniformLocation(programId, "Model");
 	loctime = glGetUniformLocation(programId, "time");
 	locres = glGetUniformLocation(programId, "resolution");
@@ -334,7 +345,7 @@ void ViewImpl::init() {
 	
 }
 
-void ViewImpl::drawScene() {
+void drawScene() {
 	glClearColor(0.0, 175.0 / 255.0, 84.0 / 255.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -355,7 +366,7 @@ void ViewImpl::drawScene() {
 	drawClaps();
 
 
-	
+	// DISEGNO CORPO
 	mat = translate(body[0].Model, babyPos);
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0, 0.0, 0.0));
@@ -368,7 +379,7 @@ void ViewImpl::drawScene() {
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(- 0.0487*width, 0.0406*width, 0.0));
 	
-
+	// DISEGNO VERTICI ARROTONDATI DEL CORPO
 	drawShape(&body[1], mat);
 
 	mat = translate(body[1].Model, babyPos);
@@ -391,6 +402,7 @@ void ViewImpl::drawScene() {
 	
 	drawShape(&body[1], mat);
 
+	// DISEGNO GAMBE
 	mat = translate(body[2].Model, babyPos);
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.093 * width, -0.068 * width, 0.0));
@@ -405,6 +417,7 @@ void ViewImpl::drawScene() {
 
 	drawShape(&body[2], mat);
 	
+	// DISEGNO BRACCIA
 	mat = translate(arm.Model, babyPos);
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.110*width, width*0.06, 0.0));
@@ -419,6 +432,7 @@ void ViewImpl::drawScene() {
 	drawShape(&arm, mat);
 
 	
+	// DISEGNO CAPPELLO
 	mat = translate(head[8].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = translate(mat, vec3(0.0, -38.0, 0.0));
 	mat = scale(mat, babyScale);
@@ -427,18 +441,21 @@ void ViewImpl::drawScene() {
 
 	drawShape(&head[8], mat);
 
+	// DISEGNO PARTE SOTTO DELLA TESTA
 	mat = translate(head[0].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0, 0.115*width, 0.0));
 
 	drawShape(&head[0], mat);
 
+	// DISEGNO PARTE SOPRA DELLA TESTA
 	mat = translate(head[1].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0, 0.164 * width, 0.0));
 
 	drawShape(&head[1], mat);
 
+	//DISEGNO ORECCHIE
 	mat = translate(head[2].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0766*width, 0.113 * width, 0.0));
@@ -451,6 +468,7 @@ void ViewImpl::drawScene() {
 
 	drawShape(&head[2], mat);
 
+	// DISEGNO OCCHI
 	mat = translate(head[3].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0291 * width, 0.155 * width, 0.0));
@@ -475,12 +493,14 @@ void ViewImpl::drawScene() {
 
 	drawShape(&head[4], mat);
 
+	// DISEGNO BOCCA
 	mat = translate(head[5].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0, 0.101 * width, 0.0));
 
 	drawShape(&head[5], mat);
 
+	// DISEGNO CORNA
 	mat = translate(head[6].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.035*width, 0.234 * width, 0.0));
@@ -494,6 +514,7 @@ void ViewImpl::drawScene() {
 
 	drawShape(&head[6], mat);
 
+	// DISEGNO SOPRACCIGLIA
 	mat = translate(head[7].Model, babyPos + vec3(0.0, headOffset, 0.0));
 	mat = scale(mat, babyScale);
 	mat = translate(mat, vec3(0.0291 * width, 0.190 * width, 0.0));
@@ -511,7 +532,7 @@ void ViewImpl::drawScene() {
 	glutSwapBuffers();
 }
 
-void ViewImpl::drawBooms() {
+void drawBooms() {
 	for (float boom : booms) {
 		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * boom) + width * (1.0 / 8), boomsHeight, 0.0));
 		mat = scale(mat, vec3(20.5, 20.5, 1.0));
@@ -519,7 +540,7 @@ void ViewImpl::drawBooms() {
 	}
 }
 
-void ViewImpl::drawClaps() {
+void drawClaps() {
 	int i = 0;
 	for(float clap : claps) {
 		mat4 mat = translate(circleW.Model, vec3((width * (3.0 / 4) * clap) + width * (1.0 / 8), 3 * height / 4, 0.0));
@@ -544,7 +565,7 @@ void ViewImpl::drawClaps() {
 	}
 }
 
-void ViewImpl::drawBalls() {
+void drawBalls() {
 	for (int i = 0; i < balls.size(); i++) {
 		Ball *ball = &balls[i];
 		if (ball->shape.alive) {
@@ -558,7 +579,7 @@ void ViewImpl::drawBalls() {
 	}
 }
 
-void ViewImpl::crea_VAO_Vector(Shape* fig)
+void crea_VAO_Vector(Shape* fig)
 {
 
 	glGenVertexArrays(1, &fig->VAO);
@@ -581,26 +602,18 @@ void ViewImpl::crea_VAO_Vector(Shape* fig)
 
 }
 
-void ViewImpl::INIT_SHADER(void)
+void INIT_SHADER(void)
 {
 	GLenum ErrorCheckValue = glGetError();
 
-	char* vertexShader = (char*)"vertexShader_M.glsl";
-	char* fragmentShader = (char*)"fragmentShader_Onde_Nuvole.glsl";
+	char* vertexShader = (char*)"vertexShader.glsl";
+	char* fragmentShader = (char*)"fragmentShader.glsl";
 
 	programId = ShaderMaker::createProgram(vertexShader, fragmentShader);
 	glUseProgram(programId);
-
-/*
-	//Generazione del program shader per la gestione del testo
-	vertexShader = (char*)"VertexShader_Text.glsl";
-	fragmentShader = (char*)"FragmentShader_Text.glsl";
-
-	programId_text = ShaderMaker::createProgram(vertexShader, fragmentShader); */
-
 }
 
-void ViewImpl::drawShape(Shape *fig, mat4 Model)
+void drawShape(Shape *fig, mat4 Model)
 {
 	glUniformMatrix4fv(MatModel, 1, GL_FALSE, value_ptr(Model));
 	glUniform1i(locSceltafs,fig->sceltaFs);
@@ -609,7 +622,7 @@ void ViewImpl::drawShape(Shape *fig, mat4 Model)
 	glBindVertexArray(0);
 }
 
-void ViewImpl::updateHead(int elapsed) {
+void updateHead(int elapsed) {
 	if (moveHead) {
 	timeElapsed += elapsed;
 	timeElapsed = (timeElapsed >= tickTime ? 0 : timeElapsed);
@@ -617,7 +630,7 @@ void ViewImpl::updateHead(int elapsed) {
 	}
 }
 
-void ViewImpl::updateBalls(int elapsed) {
+void updateBalls(int elapsed) {
 	float dx;
 	float dy;
 	for (int i = 0; i < balls.size(); i++) {
@@ -662,22 +675,18 @@ void reshape(int w, int h)
 {
 	Projection = ortho(0.0f, (float)width, 0.0f, (float)height);
 
-	float AspectRatio_mondo = (float)(width) / (float)(height); //Rapporto larghezza altezza di tutto ci  che   nel mondo
-	//Se l'aspect ratio del mondo   diversa da quella della finestra devo mappare in modo diverso 
-	//per evitare distorsioni del disegno
-	if (AspectRatio_mondo > (float)w / h)   //Se ridimensioniamo la larghezza della Viewport
+	float AspectRatio_mondo = (float)(width) / (float)(height);
+	if (AspectRatio_mondo > (float)w / h) 
 	{
 		glViewport(0, 0, w, w / AspectRatio_mondo);
 		w_update = (float)w;
 		h_update = w / AspectRatio_mondo;
 	}
-	else {  //Se ridimensioniamo la larghezza della viewport oppure se l'aspect ratio tra la finestra del mondo 
-		//e la finestra sullo schermo sono uguali
+	else { 
 		glViewport(w/2 - h * AspectRatio_mondo/2, 0, h* AspectRatio_mondo, h);
 		w_update = h * AspectRatio_mondo;
 		h_update = (float)h;
 	}
-
 }
 
 

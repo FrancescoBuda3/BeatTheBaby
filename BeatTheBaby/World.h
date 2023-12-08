@@ -15,6 +15,7 @@ public:
 	virtual long getScore() = 0;
 	virtual int getLives() = 0;
 	virtual void generateNextTimeline() = 0;
+	virtual bool isTimelineOver() = 0; 
 	virtual void reset() = 0;
 };
 

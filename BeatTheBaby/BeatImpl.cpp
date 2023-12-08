@@ -20,11 +20,9 @@ Score BeatImpl::checkClap(float timing) {
 	this->clapTimings.pop_front();
 
 	if (tmp <= PERFECT_TOLLERANCE) {
-		std::cout << "PERFECT" << std::endl;
 		return Score::PERFECT;
 	}
 	else if (tmp <= GOOD_TOLLERANCE) {
-		std::cout << "GOOD" << std::endl;
 		return Score::GOOD;
 	}
 	else {

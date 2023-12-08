@@ -22,6 +22,8 @@ void main() {
     else {
         // Mappiamo le coordinate del frammento nel sistema NDC
         vec2 ndc = (gl_FragCoord.xy / resolution.xy) * 2.0 - 1.0;
+        // per applicare l'anti aliasing all'onda, applico ad ogni punto un colore tanto più simile allo sfondo quanto
+        // il più punto è vicino a punti fuori dalla curva
         for (int i = 0; i < NUM_SAMPLES; ++i) {
             // Calcoliamo l'altezza dell'onda usando una funzione sinusoidale
             float waveHeight;
@@ -35,7 +37,7 @@ void main() {
 
             // Se il frammento è nella parte inferiore o superiore dello schermo, coloriamo con il colore dell'onda
             if (abs(ndc.y) > 0.8 + waveHeight) {
-                finalColor += waveColor; // Colore dell'onda (blu)
+                finalColor += waveColor; // Colore dell'onda (verde)
             } else {
                 finalColor += ourColor.rgb; // Colore di sfondo
             }
